@@ -11,7 +11,9 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Article.hasMany(models.Comments);
+      Article.hasMany(models.Comments, {
+        foreignKey: 'id_article',
+      });
       Article.belongsTo(models.Category, {
         foreignKey: 'id_category',
       });
