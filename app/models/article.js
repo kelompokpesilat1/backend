@@ -11,7 +11,13 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      Article.hasMany(models.Comments);
+      Article.belongsTo(models.Category, {
+        foreignKey: 'id_category',
+      });
+      Article.belongsTo(models.User, {
+        foreignKey: 'id_user',
+      });
     }
   }
   Article.init({
@@ -20,6 +26,7 @@ module.exports = (sequelize, DataTypes) => {
     title: DataTypes.STRING,
     author: DataTypes.STRING,
     viewers: DataTypes.INTEGER,
+    cover: DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'Article',

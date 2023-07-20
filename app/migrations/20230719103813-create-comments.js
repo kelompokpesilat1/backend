@@ -11,9 +11,17 @@ module.exports = {
       },
       id_user: {
         type: Sequelize.INTEGER,
+        references: {
+          model: 'users',
+          key: 'id',
+        },
       },
       id_article: {
         type: Sequelize.INTEGER,
+        references: {
+          model: 'articles',
+          key: 'id',
+        },
       },
       commentar: {
         type: Sequelize.STRING,

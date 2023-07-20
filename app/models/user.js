@@ -12,12 +12,18 @@ module.exports = (sequelize, DataTypes) => {
     // eslint-disable-next-line no-unused-vars
     static associate(models) {
       // define association here
+      User.belongsTo(models.Roles, {
+        foreignKey: 'id_roles',
+      });
+      User.hasMany(models.Comments);
+      User.hasMany(models.User);
     }
   }
   User.init({
     name: DataTypes.STRING,
     email: DataTypes.STRING,
     password: DataTypes.STRING,
+    foto: DataTypes.STRING,
     id_roles: DataTypes.INTEGER,
   }, {
     sequelize,

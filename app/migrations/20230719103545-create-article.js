@@ -11,9 +11,17 @@ module.exports = {
       },
       id_user: {
         type: Sequelize.INTEGER,
+        references: {
+          model: 'users',
+          key: 'id',
+        },
       },
       id_category: {
         type: Sequelize.INTEGER,
+        references: {
+          model: 'categories',
+          key: 'id',
+        },
       },
       title: {
         type: Sequelize.STRING,
@@ -23,6 +31,9 @@ module.exports = {
       },
       viewers: {
         type: Sequelize.INTEGER,
+      },
+      cover: {
+        type: Sequelize.STRING,
       },
       createdAt: {
         allowNull: false,
