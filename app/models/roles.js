@@ -1,7 +1,8 @@
-'use strict';
+/* eslint-disable no-unused-vars */
 const {
-  Model
+  Model,
 } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class Roles extends Model {
     /**
@@ -11,6 +12,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      this.hasMany(models.User, {
+        foreignKey: 'id_roles',
+        as: 'users',
+      });
     }
   }
   Roles.init({

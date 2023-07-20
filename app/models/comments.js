@@ -1,7 +1,8 @@
-'use strict';
+/* eslint-disable no-unused-vars */
 const {
-  Model
+  Model,
 } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class Comments extends Model {
     /**
@@ -11,12 +12,15 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Comments.hasMany(models.User, {
+        foreignKey: 'id_user',
+      });
     }
   }
   Comments.init({
     id_user: DataTypes.INTEGER,
     id_article: DataTypes.INTEGER,
-    commentar: DataTypes.STRING
+    commentar: DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'Comments',

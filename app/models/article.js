@@ -1,7 +1,8 @@
-'use strict';
+/* eslint-disable no-unused-vars */
 const {
-  Model
+  Model,
 } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class Article extends Model {
     /**
