@@ -3,11 +3,30 @@ const { getArticles, getArticleById } = require('../controllers/article');
 const { getUsers, getUserById } = require('../controllers/users');
 const { getCategory, getCategoryById } = require('../controllers/category');
 const { getRoles, getRoleById } = require('../controllers/roles');
+const { checkDuplicateEmail, register } = require('../controllers/register');
+const { login } = require('../controllers/login');
 
 const router = express.Router();
 
 /* GET home page. */
 // eslint-disable-next-line no-unused-vars
+
+// * route regis and login
+router.post(
+  '/register',
+  checkDuplicateEmail,
+  register,
+
+);
+router.post(
+  '/login',
+  login,
+
+);
+
+router.post(
+  '/login',
+);
 
 // * route article
 router.get(
