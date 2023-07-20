@@ -63,7 +63,7 @@ module.exports = {
       });
   },
 
-  isPmOrAdmin(req, res, next) {
+  isCcOrAdmin(req, res, next) {
     User.findByPk(req.userId)
       .then((user) => {
         user.getRoles().then((roles) => {
