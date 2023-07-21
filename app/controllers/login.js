@@ -30,7 +30,7 @@ const login = (req, res) => {
         });
       }
 
-      const jwtToken = jwt.sign({ id: data.id }, process.env, { expiresIn: 86400 });
+      const jwtToken = jwt.sign({ id: data.id }, process.env.SECRET, { expiresIn: 86400 });
 
       const token = `Bearer ${jwtToken}`;
 

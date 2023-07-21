@@ -9,6 +9,13 @@ const { User } = require('../models');
 
 const verifyToken = (req, res, next) => {
   const tokenHeader = req.headers['x-access-token'];
+  if (!tokenHeader) {
+    return res.status(403).send({
+      auth: false,
+      message: 'Error',
+      errors: 'No token provided',
+    });
+  }
   if (tokenHeader.split(' ')[0] !== 'Bearer') {
     return res.status(500).send({
       auth: false,
@@ -39,6 +46,25 @@ const verifyToken = (req, res, next) => {
   });
 };
 
+const isAdmin = (req, res, next) => {
+  User.findOne({
+    where: {
+      id: req.userId,
+    },
+  }).then((user) => {
+    console.log(user.id_roles);
+    if (user.id_roles === 1) {
+      next();
+      return;
+    }
+    res.status(403).send({
+      auth: false,
+      message: 'Error',
+      message: 'Require Admin Role',
+    });
+  });
+};
+
 const isAdminOrAuthor = (req, res, next) => {
   User.findOne({
     where: {
@@ -61,4 +87,5 @@ const isAdminOrAuthor = (req, res, next) => {
 module.exports = {
   verifyToken,
   isAdminOrAuthor,
+  isAdmin,
 };
