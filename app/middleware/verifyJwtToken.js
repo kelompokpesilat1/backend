@@ -65,14 +65,13 @@ const isAdmin = (req, res, next) => {
   });
 };
 
-const isAdminOrAuthor = (req, res, next) => {
+const isAuthor = (req, res, next) => {
   User.findOne({
     where: {
       id: req.userId,
     },
   }).then((user) => {
-    console.log(user.id_roles);
-    if (user.id_roles === 2 || user.id_roles === 1) {
+    if (user.id_roles === 2) {
       next();
       return;
     }
@@ -86,6 +85,6 @@ const isAdminOrAuthor = (req, res, next) => {
 
 module.exports = {
   verifyToken,
-  isAdminOrAuthor,
+  isAuthor,
   isAdmin,
 };
