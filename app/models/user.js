@@ -15,8 +15,12 @@ module.exports = (sequelize, DataTypes) => {
       User.belongsTo(models.Roles, {
         foreignKey: 'id_roles',
       });
-      User.hasMany(models.Comments);
-      User.hasMany(models.User);
+      User.hasMany(models.Comments, {
+        foreignKey: 'id_user',
+      });
+      User.hasMany(models.Article, {
+        foreignKey: 'id_user',
+      });
     }
   }
   User.init({

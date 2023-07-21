@@ -2,83 +2,53 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable no-undef */
 const express = require('express');
+const { getArticles, getArticleById } = require('../controllers/article');
+const { getUsers, getUserById } = require('../controllers/users');
+const { getCategory, getCategoryById } = require('../controllers/category');
+const { getRoles, getRoleById } = require('../controllers/roles');
 
 const router = express.Router();
 
 /* GET home page. */
 // eslint-disable-next-line no-unused-vars
-router.get('/', (req, res, next) => {
-  res.render('index', { title: 'Express' });
-});
 
-// eslint-disable-next-line func-names
-module.exports = function (app) {
-  app.use((req, res, next) => {
-    res.header(
-		  'Access-Control-Allow-Headers',
-      'x-access-token, Origin, Content-Type, Accept',
-    );
-    next();
-  });
+// * route article
+router.get(
+  '/articles',
+  getArticles,
+);
+router.get(
+  '/articles/:id',
+  getArticleById,
+);
 
-  app.post(
-    '/api/auth/signup',
-    [
-      verifySignUpController.checkDuplicateUserNameOrEmail,
-      verifySignUpController.checkRolesExisted,
-    ],
-    verifySignController.signup,
-  );
+// * route user
+router.get(
+  '/users',
+  getUsers,
+);
+router.get(
+  '/user/:id',
+  getUserById,
+);
 
-  app.post('/api/auth/signin', (req, res) => {
-    verifySignController.signIn(req, res);
-  });
+// * route category
+router.get(
+  '/category',
+  getCategory,
+);
+router.get(
+  '/category/:id',
+  getCategoryById,
+);
 
-  // Status
-  app.get('/api/status', (req, res) => {
-    statusController.list(req, res);
-  });
-  app.get('/api/statususer', [verifyJwtTokenController.verifyToken], (req, res) => {
-    statusController.listStatusUser(req, res);
-  });
-  app.get(
-    '/api/status/:id',
-    [
-      verifyJwtTokenController.verifyToken,
-      verifyJwtTokenController.isAdmin,
-    ],
-    (req, res) => {
-      statusController.getById(req, res);
-    },
-  );
-  app.post(
-    '/api/status',
-    [
-      verifyJwtTokenController.verifyToken,
-      verifyJwtTokenController.isAdmin,
-    ],
-    (req, res) => {
-      statusController.add(req, res);
-    },
-  );
-  app.put(
-    '/api/status/:id',
-    [
-      verifyJwtTokenController.verifyToken,
-      verifyJwtTokenController.isAdmin,
-    ],
-    (req, res) => {
-      statusController.update(req, res);
-    },
-  );
-  app.delete(
-    '/api/status/:id',
-    [
-      verifyJwtTokenController.verifyToken,
-      verifyJwtTokenController.isAdmin,
-    ],
-    (req, res) => {
-      statusController.delete(req, res);
-    },
-  );
-};
+// * route roles
+router.get(
+  '/roles',
+  getRoles,
+);
+router.get(
+  '/role/:id',
+  getRoleById,
+);
+module.exports = router;
