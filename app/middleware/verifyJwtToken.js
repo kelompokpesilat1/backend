@@ -5,11 +5,7 @@
 /* eslint-disable no-plusplus */
 /* eslint-disable no-dupe-keys */
 const jwt = require('jsonwebtoken');
-const config = require('../config/configRoles.js');
-const { User } = require('../models/index.js');
-const { Roles } = require('../models/index.js');
-
-const createToken = (payload) => jwt.sign(payload, process.env.SECRET);
+const { User } = require('../models');
 
 const verifyToken = (req, res, next) => {
   const tokenHeader = req.headers['x-access-token'];
@@ -30,7 +26,7 @@ const verifyToken = (req, res, next) => {
     });
   }
 
-  jwt.verify(token, config.secret, (err, decoded) => {
+  jwt.verify(token, process.env.SECRET, (err, decoded) => {
     if (err) {
       return res.status(500).send({
         auth: false,
@@ -43,52 +39,26 @@ const verifyToken = (req, res, next) => {
   });
 };
 
-const isAdmin = (req, res, next) => {
-  User.findByPk(req.userId)
-    .then((user) => {
-      user.getRoles().then((roles) => {
-        for (let i = 0; i < roles.length; i++) {
-          console.log(roles[i].name);
-          if (roles[i].name.toUpperCase() === 'ADMIN') {
-            next();
-            return;
-          }
-        }
-        res.status(403).send({
-          auth: false,
-          message: 'Error',
-          message: 'Require Admin Role',
-        });
-      });
+const isAdminOrAuthor = (req, res, next) => {
+  User.findOne({
+    where: {
+      id: req.userId,
+    },
+  }).then((user) => {
+    console.log(user.id_roles);
+    if (user.id_roles === 2 || user.id_roles === 1) {
+      next();
+      return;
+    }
+    res.status(403).send({
+      auth: false,
+      message: 'Error',
+      message: 'Require CC/Admin Role',
     });
-};
-
-const isAuthor = (req, res, next) => {
-  User.findByPk(req.userId)
-    .then((user) => {
-      user.getRoles().then((roles) => {
-        for (let i = 0; i < roles.length; i++) {
-          if (roles[i].name.toUpperCase() === 'CC') {
-            next();
-            return;
-          }
-          if (roles[i].name.toUpperCase() === 'ADMIN') {
-            next();
-            return;
-          }
-        }
-        res.status(403).send({
-          auth: false,
-          message: 'Error',
-          message: 'Require CC/Admin Role',
-        });
-      });
-    });
+  });
 };
 
 module.exports = {
-  createToken,
   verifyToken,
-  isAdmin,
-  isAuthor,
+  isAdminOrAuthor,
 };
