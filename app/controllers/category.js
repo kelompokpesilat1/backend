@@ -1,6 +1,26 @@
 const { Category } = require('../models');
 const { Article } = require('../models');
 
+// add category
+const addCategory = (req, res) => {
+  const { category } = req.body;
+
+  Category.create({ category })
+    .then((newCategory) => {
+      res.status(201).send({
+        status: 'success',
+        message: 'Kategori berhasil ditambahkan',
+        category: newCategory,
+      });
+    })
+    .catch((err) => {
+      res.status(500).send({
+        message: 'Error',
+        errors: err.message,
+      });
+    });
+};
+
 const getCategory = (req, res) => {
   Category.findAll().then((data) => {
     res.send({
@@ -42,4 +62,4 @@ const getCategoryById = (req, res) => {
       });
     });
 };
-module.exports = { getCategory, getCategoryById };
+module.exports = { addCategory, getCategory, getCategoryById };
