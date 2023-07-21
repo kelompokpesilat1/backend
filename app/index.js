@@ -16,8 +16,10 @@ const port = process.env.PORT;
 
 try {
   sequelize.authenticate();
+  // eslint-disable-next-line no-console
   console.log('Connection has been established successfully.');
 } catch (error) {
+  // eslint-disable-next-line no-console
   console.error('Unable to connect to the database:', error);
 }
 
@@ -28,5 +30,6 @@ app.use(bodyParser.urlencoded({
 app.use(router);
 
 app.listen(port, () => {
+  // eslint-disable-next-line no-console
   console.log(`Example app listening on port ${port}`);
 });

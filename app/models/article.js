@@ -1,7 +1,8 @@
-'use strict';
+/* eslint-disable no-unused-vars */
 const {
-  Model
+  Model,
 } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class Article extends Model {
     /**
@@ -10,7 +11,15 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      Article.hasMany(models.Comments, {
+        foreignKey: 'id_article',
+      });
+      Article.belongsTo(models.Category, {
+        foreignKey: 'id_category',
+      });
+      Article.belongsTo(models.User, {
+        foreignKey: 'id_user',
+      });
     }
   }
   Article.init({
@@ -19,6 +28,7 @@ module.exports = (sequelize, DataTypes) => {
     title: DataTypes.STRING,
     author: DataTypes.STRING,
     viewers: DataTypes.INTEGER,
+    cover: DataTypes.STRING,
   }, {
     sequelize,
     modelName: 'Article',

@@ -1,4 +1,4 @@
-'use strict';
+/* eslint-disable no-unused-vars */
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
@@ -20,6 +20,13 @@ module.exports = {
       },
       id_roles: {
         type: Sequelize.INTEGER,
+        references: {
+          model: 'roles',
+          key: 'id',
+        },
+      },
+      foto: {
+        type: Sequelize.STRING,
       },
       createdAt: {
         allowNull: false,
