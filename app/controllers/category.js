@@ -3,14 +3,19 @@ const { Category } = require('../models');
 const { Article } = require('../models');
 
 // add category
-const addCategory = (req, res) => {
+const addCategory = (req, res, next) => {
   const { category } = req.body;
 
-  Category.create({ category })
+  const userId = req.user.userId;
+
+  Category.create({
+    category,
+    userId,
+  })
     .then((newCategory) => {
       res.status(201).send({
         status: 'success',
-        message: 'Kategori berhasil ditambahkan',
+        message: 'Category successfully created.',
         category: newCategory,
       });
     })
