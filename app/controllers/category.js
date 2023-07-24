@@ -3,10 +3,10 @@ const { Category } = require('../models');
 const { Article } = require('../models');
 
 // add category
-const addCategory = (req, res, next) => {
+const addCategory = (req, res) => {
   const { category } = req.body;
 
-  const userId = req.user.userId;
+  const { userId } = req.user;
 
   Category.create({
     category,

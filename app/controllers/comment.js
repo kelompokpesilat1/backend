@@ -19,11 +19,20 @@ const createComment = (req, res) => {
 
 const deleteComment = (req, res) => {
   const { id } = req.params;
+  const { userId } = req;
   Comments.destroy({
     where: {
       id,
     },
   }).then((data) => {
+    if (data.id_user !== userId) {
+      res.status(500)
+        .send({
+          status: 'fail',
+          message: 'maaf anda tidak bisa menghapus komentar ini',
+        });
+      return;
+    }
     res.send({
       status: 'success',
       message: 'berhasil menghapus commentar',
@@ -34,4 +43,35 @@ const deleteComment = (req, res) => {
   });
 };
 
-module.exports = { createComment, deleteComment };
+const editCommentByUser = (req, res) => {
+  const { id } = req.params;
+  const { commentar } = req.body;
+  const { userId } = req;
+  Comments.findByPk(id)
+    .then((comment) => {
+      if (comment.id_user !== userId) {
+        res.status(500)
+          .send({
+            status: 'fail',
+            message: 'maaf anda tidak bisa mengubah komentar ini',
+          });
+        return;
+      }
+      comment.update({
+        commentar,
+      }).then((data) => {
+        res.send({
+          status: 'success',
+          message: 'berhasil mengupdata commentar',
+          commentar: data.commentar,
+        });
+      }).catch((err) => {
+        res.status(500).send(err.message);
+      });
+    })
+    .catch((err) => {
+      res.status(500).send(err.message);
+    });
+};
+
+module.exports = { createComment, deleteComment, editCommentByUser };

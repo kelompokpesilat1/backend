@@ -24,7 +24,7 @@ try {
   console.error('Unable to connect to the database:', error);
 }
 
-app.use(cors);
+app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true,

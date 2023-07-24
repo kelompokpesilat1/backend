@@ -11,11 +11,17 @@ const {
   editUserByUser,
   deleteUserByUser,
 } = require('../controllers/users');
-const { getCategory, getCategoryById } = require('../controllers/category');
+const {
+  addCategory,
+  updateCategoryById,
+  deleteCategoryById,
+  getCategory,
+  getCategoryById,
+} = require('../controllers/category');
 const { getRoles, getRoleById } = require('../controllers/roles');
 const { checkDuplicateEmail, register } = require('../controllers/register');
 const { login } = require('../controllers/login');
-const { createComment, deleteComment } = require('../controllers/comment');
+const { createComment, deleteComment, editCommentByUser } = require('../controllers/comment');
 const { verifyToken, isAuthor, isAdmin } = require('../middleware/verifyJwtToken');
 
 const router = express.Router();
@@ -123,5 +129,10 @@ router.delete(
   deleteComment,
 );
 
+router.put(
+  '/article/editcomment/:id',
+  verifyToken,
+  editCommentByUser,
+);
 
 module.exports = router;
