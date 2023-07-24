@@ -78,7 +78,7 @@ const isAuthor = (req, res, next) => {
     res.status(403).send({
       auth: false,
       message: 'Error',
-      message: 'Require CC/Admin Role',
+      message: 'Require author Role',
     });
   });
 };

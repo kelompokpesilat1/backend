@@ -1,6 +1,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 // inisialisani express
 const express = require('express');
+const cors = require('cors');
 
 const app = express();
 const bodyParser = require('body-parser');
@@ -23,6 +24,7 @@ try {
   console.error('Unable to connect to the database:', error);
 }
 
+app.use(cors);
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true,

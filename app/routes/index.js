@@ -16,7 +16,7 @@ const { getRoles, getRoleById } = require('../controllers/roles');
 const { checkDuplicateEmail, register } = require('../controllers/register');
 const { login } = require('../controllers/login');
 const { createComment, deleteComment } = require('../controllers/comment');
-const { verifyToken, isAdminOrAuthor, isAdmin } = require('../middleware/verifyJwtToken');
+const { verifyToken, isAuthor, isAdmin } = require('../middleware/verifyJwtToken');
 
 const router = express.Router();
 
