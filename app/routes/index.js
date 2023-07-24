@@ -2,7 +2,8 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable no-undef */
 const express = require('express');
-const { getArticles, getArticleById } = require('../controllers/article');
+const { getArticles, getArticleById, searchArticle } = require('../controllers/article');
+
 const {
   getUsers,
   getUserById,
@@ -10,7 +11,9 @@ const {
   deleteUserByAdmin,
   editUserByUser,
   deleteUserByUser,
+  searchUser,
 } = require('../controllers/users');
+
 const {
   addCategory,
   updateCategoryById,
@@ -18,6 +21,7 @@ const {
   getCategory,
   getCategoryById,
 } = require('../controllers/category');
+
 const { getRoles, getRoleById } = require('../controllers/roles');
 const { checkDuplicateEmail, register } = require('../controllers/register');
 const { login } = require('../controllers/login');
@@ -51,6 +55,10 @@ router.get(
   '/articles/:id',
   getArticleById,
 );
+router.get(
+  '/articles/search/:q',
+  searchArticle,
+);
 
 // * route user
 router.get(
@@ -60,6 +68,10 @@ router.get(
 router.get(
   '/user/:id',
   getUserById,
+);
+router.get(
+  '/user/search/:q',
+  searchUser,
 );
 router.put(
   '/user/editAdmin/:id',

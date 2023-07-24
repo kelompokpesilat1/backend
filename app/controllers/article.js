@@ -1,3 +1,5 @@
+/* eslint-disable no-param-reassign */
+const { Op } = require('sequelize');
 const { Article } = require('../models');
 const { Comments } = require('../models');
 
@@ -16,6 +18,7 @@ const getArticles = (req, res) => {
 const getArticleById = (req, res) => {
   Article.findByPk(req.params.id)
     .then((article) => {
+      article.viewers += 1;
       Comments.findAll({
         where: {
           id_article: article.id,
@@ -46,7 +49,27 @@ const getArticleById = (req, res) => {
     });
 };
 
+const searchArticle = (req, res) => {
+  const searchQuery = req.params.id;
+  Article.findAll({
+    where: {
+      title: {
+        [Op.like]: `%${searchQuery}%`,
+      },
+    },
+  }).then((data) => {
+    res.send({
+      status: 'success',
+      message: 'berhasil menampilkan data',
+      data,
+    });
+  }).catch((err) => {
+    res.status(400).send(err.message);
+  });
+};
+
 module.exports = {
   getArticles,
   getArticleById,
+  searchArticle,
 };

@@ -4,6 +4,7 @@
 /* eslint-disable camelcase */
 /* eslint-disable consistent-return */
 
+const { Op } = require('sequelize');
 const { User } = require('../models');
 const { Roles } = require('../models');
 const { Article } = require('../models');
@@ -199,6 +200,25 @@ const deleteUserByUser = (req, res) => {
   });
 };
 
+const searchUser = (req, res) => {
+  const searchQuery = req.params.q;
+  User.findAll({
+    where: {
+      name: {
+        [Op.like]: `%${searchQuery}%`,
+      },
+    },
+  }).then((data) => {
+    res.send({
+      status: 'success',
+      message: 'berhasil menampilkan data',
+      data,
+    });
+  }).catch((err) => {
+    res.status(400).send(err.message);
+  });
+};
+
 module.exports = {
   getUsers,
   getUserById,
@@ -207,4 +227,5 @@ module.exports = {
   deleteUserByAdmin,
   editUserByUser,
   deleteUserByUser,
+  searchUser,
 };

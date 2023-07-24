@@ -39,7 +39,7 @@ const register = (req, res) => {
   }).then((data) => {
     res.status(200).send({
       status: 'success',
-      message: 'berhasil menampilkan data',
+      message: 'berhasil menambah data',
       category: {
         data,
       },
