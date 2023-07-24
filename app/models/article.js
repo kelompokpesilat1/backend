@@ -1,4 +1,7 @@
+/* eslint-disable import/extensions */
+/* eslint-disable no-undef */
 /* eslint-disable no-unused-vars */
+
 const {
   Model,
 } = require('sequelize');

@@ -1,7 +1,12 @@
+/* eslint-disable no-tabs */
+/* eslint-disable no-mixed-spaces-and-tabs */
+/* eslint-disable no-undef */
 const express = require('express');
 const { getArticles, getArticleById } = require('../controllers/article');
 const { getUsers, getUserById } = require('../controllers/users');
-const { getCategory, getCategoryById } = require('../controllers/category');
+const {
+  addCategory, getCategory, getCategoryById, deleteCategoryById, updateCategoryById,
+} = require('../controllers/category');
 const { getRoles, getRoleById } = require('../controllers/roles');
 const { checkDuplicateEmail, register } = require('../controllers/register');
 const { login } = require('../controllers/login');
@@ -49,6 +54,10 @@ router.get(
 );
 
 // * route category
+router.post(
+  '/category',
+  addCategory,
+);
 router.get(
   '/category',
   getCategory,
@@ -56,6 +65,14 @@ router.get(
 router.get(
   '/category/:id',
   getCategoryById,
+);
+router.put(
+  '/category/:id',
+  updateCategoryById,
+);
+router.delete(
+  '/category/:id',
+  deleteCategoryById,
 );
 
 // * route roles
@@ -67,5 +84,4 @@ router.get(
   '/role/:id',
   getRoleById,
 );
-
 module.exports = router;
