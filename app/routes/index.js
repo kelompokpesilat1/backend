@@ -3,13 +3,20 @@
 /* eslint-disable no-undef */
 const express = require('express');
 const { getArticles, getArticleById } = require('../controllers/article');
-const { getUsers, getUserById } = require('../controllers/users');
 const {
-  addCategory, getCategory, getCategoryById, deleteCategoryById, updateCategoryById,
-} = require('../controllers/category');
+  getUsers,
+  getUserById,
+  editUserByAdmin,
+  deleteUserByAdmin,
+  editUserByUser,
+  deleteUserByUser,
+} = require('../controllers/users');
+const { getCategory, getCategoryById } = require('../controllers/category');
 const { getRoles, getRoleById } = require('../controllers/roles');
 const { checkDuplicateEmail, register } = require('../controllers/register');
 const { login } = require('../controllers/login');
+const { createComment, deleteComment } = require('../controllers/comment');
+const { verifyToken, isAdminOrAuthor, isAdmin } = require('../middleware/verifyJwtToken');
 
 const router = express.Router();
 
@@ -27,10 +34,6 @@ router.post(
   '/login',
   login,
 
-);
-
-router.post(
-  '/login',
 );
 
 // * route article
@@ -51,6 +54,28 @@ router.get(
 router.get(
   '/user/:id',
   getUserById,
+);
+router.put(
+  '/user/editAdmin/:id',
+  verifyToken,
+  isAdmin,
+  editUserByAdmin,
+);
+router.delete(
+  '/user/deleteAdmin',
+  verifyToken,
+  isAdmin,
+  deleteUserByAdmin,
+);
+router.put(
+  '/user/edit',
+  verifyToken,
+  editUserByUser,
+);
+router.delete(
+  '/user/delete',
+  verifyToken,
+  deleteUserByUser,
 );
 
 // * route category
@@ -84,4 +109,19 @@ router.get(
   '/role/:id',
   getRoleById,
 );
+
+// * route comment
+router.post(
+  '/article/:id/comment',
+  verifyToken,
+  createComment,
+);
+
+router.delete(
+  '/article/comment/:id',
+  verifyToken,
+  deleteComment,
+);
+
+
 module.exports = router;
