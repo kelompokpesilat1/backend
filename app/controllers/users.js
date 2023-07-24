@@ -1,5 +1,9 @@
+/* eslint-disable no-shadow */
+/* eslint-disable no-unused-vars */
+/* eslint-disable no-undef */
 /* eslint-disable camelcase */
 /* eslint-disable consistent-return */
+
 const { User } = require('../models');
 const { Roles } = require('../models');
 const { Article } = require('../models');

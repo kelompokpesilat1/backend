@@ -1,3 +1,6 @@
+/* eslint-disable no-tabs */
+/* eslint-disable no-mixed-spaces-and-tabs */
+/* eslint-disable no-undef */
 const express = require('express');
 const { getArticles, getArticleById } = require('../controllers/article');
 const {
@@ -76,6 +79,10 @@ router.delete(
 );
 
 // * route category
+router.post(
+  '/category',
+  addCategory,
+);
 router.get(
   '/category',
   getCategory,
@@ -83,6 +90,14 @@ router.get(
 router.get(
   '/category/:id',
   getCategoryById,
+);
+router.put(
+  '/category/:id',
+  updateCategoryById,
+);
+router.delete(
+  '/category/:id',
+  deleteCategoryById,
 );
 
 // * route roles
@@ -107,5 +122,6 @@ router.delete(
   verifyToken,
   deleteComment,
 );
+
 
 module.exports = router;
