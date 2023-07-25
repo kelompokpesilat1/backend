@@ -32,6 +32,7 @@ module.exports = (sequelize, DataTypes) => {
     author: DataTypes.STRING,
     viewers: DataTypes.INTEGER,
     cover: DataTypes.STRING,
+    important: DataTypes.BOOLEAN,
   }, {
     sequelize,
     modelName: 'Article',

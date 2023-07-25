@@ -39,6 +39,9 @@ module.exports = {
       cover: {
         type: Sequelize.STRING,
       },
+      important: {
+        type: Sequelize.BOOLEAN,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
