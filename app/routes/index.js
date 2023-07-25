@@ -2,14 +2,7 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable no-undef */
 const express = require('express');
-const {
-  getArticles,
-  getArticleById,
-  searchArticle,
-  viewersIncrement,
-  addArticle,
-} = require('../controllers/article');
-
+const { addArticles, getArticles, getArticlesById, putArticles, deleteArticles, searchArticle, viewersIncrement } = require('../controllers/article');
 const {
   getUsers,
   getUserById,
@@ -19,21 +12,12 @@ const {
   deleteUserByUser,
   searchUser,
 } = require('../controllers/users');
-
-const {
-  addCategory,
-  updateCategoryById,
-  deleteCategoryById,
-  getCategory,
-  getCategoryById,
-} = require('../controllers/category');
-
+const { addCategory, getCategory, getCategoryById, updateCategoryById, deleteCategoryById } = require('../controllers/category');
 const { getRoles, getRoleById } = require('../controllers/roles');
 const { checkDuplicateEmail, register } = require('../controllers/register');
 const { login } = require('../controllers/login');
 const { createComment, deleteComment, editCommentByUser } = require('../controllers/comment');
-const { verifyToken, isAuthor, isAdmin } = require('../middleware/verifyJwtToken');
-const { viewForAdmin, viewAuthor } = require('../controllers/view');
+const { verifyToken, isAuthor, isAdmin, } = require('../middleware/verifyJwtToken');
 
 const router = express.Router();
 
@@ -45,31 +29,46 @@ router.post(
   '/register',
   checkDuplicateEmail,
   register,
-
 );
+
 router.post(
   '/login',
   login,
-
 );
-
 // * route article
+router.post(
+  '/articles',
+  verifyToken,
+  isAuthor,
+  addArticles,
+);
 router.get(
   '/articles',
+  verifyToken,
+  isAuthor,
   getArticles,
 );
 router.get(
   '/articles/:id',
-  viewersIncrement,
-  getArticleById,
+  verifyToken,
+  isAuthor,
+  getArticlesById,
+);
+router.put(
+  '/articles/edit/:id',
+  verifyToken,
+  isAuthor,
+  putArticles,
+);
+router.delete(
+  '/articles/delete/:id',
+  verifyToken,
+  isAuthor,
+  deleteArticles,
 );
 router.get(
   '/articles/search/:q',
   searchArticle,
-);
-router.post(
-  '/addArticle',
-  addArticle,
 );
 
 // * route user
@@ -84,12 +83,6 @@ router.get(
 router.get(
   '/user/search/:q',
   searchUser,
-);
-router.put(
-  '/user/editAdmin/:id',
-  verifyToken,
-  isAdmin,
-  editUserByAdmin,
 );
 router.delete(
   '/user/deleteAdmin',
@@ -111,22 +104,32 @@ router.delete(
 // * route category
 router.post(
   '/category',
+  verifyToken,
+  isAuthor,
   addCategory,
 );
 router.get(
   '/category',
+  verifyToken,
+  isAuthor,
   getCategory,
 );
 router.get(
   '/category/:id',
+  verifyToken,
+  isAuthor,
   getCategoryById,
 );
 router.put(
-  '/category/:id',
+  '/category/edit/:id',
+  verifyToken,
+  isAuthor,
   updateCategoryById,
 );
 router.delete(
-  '/category/:id',
+  '/category/delete/:id',
+  verifyToken,
+  isAuthor,
   deleteCategoryById,
 );
 
@@ -157,21 +160,6 @@ router.put(
   '/article/editcomment/:id',
   verifyToken,
   editCommentByUser,
-);
-
-// * route buat view
-router.get(
-  '/author/view',
-  verifyToken,
-  isAuthor,
-  viewAuthor,
-);
-
-router.get(
-  '/admin/view',
-  verifyToken,
-  isAdmin,
-  viewForAdmin,
 );
 
 module.exports = router;
