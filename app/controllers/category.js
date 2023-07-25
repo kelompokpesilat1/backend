@@ -3,29 +3,26 @@ const { Category } = require('../models');
 const { Article } = require('../models');
 
 // add category
-const addCategory = (req, res) => {
-  const { category } = req.body;
+const addCategory = async (req, res) => {
+  try {
+    const { category } = req.body;
+    const newCategory = await Category.create({ category });
 
-  const { userId } = req.user;
-
-  Category.create({
-    category,
-    userId,
-  })
-    .then((newCategory) => {
-      res.status(201).send({
-        status: 'success',
-        message: 'Category successfully created.',
-        category: newCategory,
-      });
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message: 'Error',
-        errors: err.message,
-      });
+    res.status(200).json({
+      status: 'success',
+      data: {
+        categoryId: newCategory.id,
+      },
     });
+  } catch (err) {
+    res.status(500).json({
+      status: 'error',
+      message: 'Gagal menambahkan kategori',
+      errors: err.message,
+    });
+  }
 };
+
 
 const getCategory = (req, res) => {
   Category.findAll().then((data) => {
@@ -104,38 +101,33 @@ const updateCategoryById = (req, res) => {
     });
 };
 
-const deleteCategoryById = (req, res) => {
-  const categoryId = req.params.id;
+const deleteCategoryById = async (req, res) => {
+  try {
+    const categoryId = req.params.id;
 
-  Category.findByPk(categoryId)
-    .then((category) => {
-      if (!category) {
-        return res.status(404).send({
-          message: 'Kategori tidak ditemukan',
-        });
-      }
-
-      category.destroy()
-        .then(() => {
-          res.status(200).send({
-            status: 'success',
-            message: 'Kategori berhasil dihapus',
-          });
-        })
-        .catch((err) => {
-          res.status(500).send({
-            message: 'Error',
-            errors: err.message,
-          });
-        });
-    })
-    .catch((err) => {
-      res.status(500).send({
-        message: 'Error',
-        errors: err.message,
+    const category = await Category.findByPk(categoryId);
+    if (!category) {
+      return res.status(404).send({
+        message: 'Kategori tidak ditemukan',
       });
+    }
+
+    await category.destroy();
+
+    res.status(200).send({
+      status: 'success',
+      message: 'Kategori berhasil dihapus',
     });
+  } catch (err) {
+    res.status(500).send({
+      message: 'Terjadi kesalahan saat menghapus kategori',
+      error: err.message,
+    });
+  }
 };
+
+
+
 module.exports = {
   addCategory, getCategory, getCategoryById, updateCategoryById, deleteCategoryById,
 };
