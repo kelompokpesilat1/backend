@@ -33,6 +33,9 @@ module.exports = {
       author: {
         type: Sequelize.STRING,
       },
+      content: {
+        type: Sequelize.TEXT,
+      },
       viewers: {
         type: Sequelize.INTEGER,
       },

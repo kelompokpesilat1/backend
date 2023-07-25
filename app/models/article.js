@@ -30,6 +30,7 @@ module.exports = (sequelize, DataTypes) => {
     id_category: DataTypes.INTEGER,
     title: DataTypes.STRING,
     author: DataTypes.STRING,
+    content: DataTypes.TEXT,
     viewers: DataTypes.INTEGER,
     cover: DataTypes.STRING,
     important: DataTypes.BOOLEAN,
