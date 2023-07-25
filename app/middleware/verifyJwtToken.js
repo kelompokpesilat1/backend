@@ -10,7 +10,7 @@ const { User } = require('../models');
 const verifyToken = (req, res, next) => {
   const tokenHeader = req.headers['x-access-token'];
   if (!tokenHeader) {
-    return res.status(403).send({
+    return res.status(500).send({
       auth: false,
       message: 'Error',
       errors: 'No token provided',

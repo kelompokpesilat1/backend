@@ -89,9 +89,35 @@ const viewersIncrement = (req, res, next) => {
   next();
 };
 
+const addArticle = (req, res) => {
+  const { userId } = req;
+  const { category } = req.body;
+  const {
+    title, author, cover, important,
+  } = req.body;
+  Article.create({
+    id_user: userId,
+    id_category: category,
+    title,
+    author,
+    cover,
+    important,
+  })
+    .then((data) => {
+      res.send({
+        status: 'success',
+        message: 'berhasil menampilkan data',
+        data,
+      });
+    }).catch((err) => {
+      res.status(400).send(err.message);
+    });
+};
+
 module.exports = {
   getArticles,
   getArticleById,
   searchArticle,
   viewersIncrement,
+  addArticle,
 };

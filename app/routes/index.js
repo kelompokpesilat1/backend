@@ -2,7 +2,13 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable no-undef */
 const express = require('express');
-const { getArticles, getArticleById, searchArticle, viewersIncrement } = require('../controllers/article');
+const {
+  getArticles,
+  getArticleById,
+  searchArticle,
+  viewersIncrement,
+  addArticle,
+} = require('../controllers/article');
 
 const {
   getUsers,
@@ -27,6 +33,7 @@ const { checkDuplicateEmail, register } = require('../controllers/register');
 const { login } = require('../controllers/login');
 const { createComment, deleteComment, editCommentByUser } = require('../controllers/comment');
 const { verifyToken, isAuthor, isAdmin } = require('../middleware/verifyJwtToken');
+const { viewForAdmin, viewAuthor } = require('../controllers/view');
 
 const router = express.Router();
 
@@ -59,6 +66,10 @@ router.get(
 router.get(
   '/articles/search/:q',
   searchArticle,
+);
+router.post(
+  '/addArticle',
+  addArticle,
 );
 
 // * route user
@@ -146,6 +157,21 @@ router.put(
   '/article/editcomment/:id',
   verifyToken,
   editCommentByUser,
+);
+
+// * route buat view
+router.get(
+  '/author/view',
+  verifyToken,
+  isAuthor,
+  viewAuthor,
+);
+
+router.get(
+  '/admin/view',
+  verifyToken,
+  isAdmin,
+  viewForAdmin,
 );
 
 module.exports = router;
