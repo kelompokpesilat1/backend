@@ -30,6 +30,24 @@ const register = (req, res) => {
   const { name, email, foto } = req.body;
   const password = bcrypt.hashSync(req.body.password);
   const roles = 3;
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+  if (!passwordRegex.test(req.body.password)) {
+    res.status(401).send({
+      status: 'failed',
+      message: 'maaf password tidak valid',
+    });
+    return;
+  }
+  if (!emailRegex.test(email)) {
+    res.status(401).send({
+      status: 'failed',
+      message: 'maaf email tidak valid',
+    });
+    return;
+  }
   User.create({
     name,
     email,
