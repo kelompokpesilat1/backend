@@ -2,7 +2,7 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable no-undef */
 const express = require('express');
-const { getArticles, getArticleById, searchArticle } = require('../controllers/article');
+const { getArticles, getArticleById, searchArticle, viewersIncrement } = require('../controllers/article');
 
 const {
   getUsers,
@@ -53,6 +53,7 @@ router.get(
 );
 router.get(
   '/articles/:id',
+  viewersIncrement,
   getArticleById,
 );
 router.get(

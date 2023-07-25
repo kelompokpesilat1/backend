@@ -68,8 +68,30 @@ const searchArticle = (req, res) => {
   });
 };
 
+const viewersIncrement = (req, res, next) => {
+  const { id } = req.params;
+  Article.findByPk(id)
+    .then((data) => {
+      data.increment({
+        viewers: 1,
+      }).catch((err) => {
+        res.status(500).send({
+          message: 'Error',
+          errors: err.message,
+        });
+      });
+    }).catch((err) => {
+      res.status(500).send({
+        message: 'Error',
+        errors: err.message,
+      });
+    });
+  next();
+};
+
 module.exports = {
   getArticles,
   getArticleById,
   searchArticle,
+  viewersIncrement,
 };

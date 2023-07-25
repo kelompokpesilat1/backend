@@ -2,14 +2,14 @@
 module.exports = {
   async up(queryInterface) {
     await queryInterface.bulkInsert('users', [{
-      name: 'John Doe',
-      email: 'jhondoe@gmail.com',
-      password: 'adminKelompok1',
+      name: 'Mamang Galih',
+      email: 'admin@gmail.com',
+      password: '12345678',
       id_roles: 1,
     }], {});
   },
 
   async down(queryInterface) {
-    await queryInterface.bulkDelete('users', null, {});
+    await queryInterface.bulkDelete('', null, {});
   },
 };

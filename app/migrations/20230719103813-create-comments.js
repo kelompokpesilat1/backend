@@ -16,7 +16,7 @@ module.exports = {
           key: 'id',
         },
         onDelete: 'CASCADE',
-        onUpdate: 'RESTRIC',
+        onUpdate: 'RESTRICT',
       },
       id_article: {
         type: Sequelize.INTEGER,
@@ -25,7 +25,7 @@ module.exports = {
           key: 'id',
         },
         onDelete: 'CASCADE',
-        onUpdate: 'RESTRIC',
+        onUpdate: 'RESTRICT',
       },
       commentar: {
         type: Sequelize.STRING,

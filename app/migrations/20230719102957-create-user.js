@@ -24,6 +24,8 @@ module.exports = {
           model: 'roles',
           key: 'id',
         },
+        onDelete: 'CASCADE',
+        onUpdate: 'RESTRICT',
       },
       foto: {
         type: Sequelize.STRING,
