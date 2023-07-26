@@ -35,6 +35,7 @@ const { login } = require('../controllers/login');
 const { createComment, deleteComment, editCommentByUser } = require('../controllers/comment');
 const { verifyToken, isAuthor, isAdmin } = require('../middleware/verifyJwtToken');
 const { viewForAdmin, viewAuthor } = require('../controllers/view');
+const { createSEO, deleteSEO } = require('../controllers/seo');
 
 const router = express.Router();
 
@@ -178,6 +179,16 @@ router.get(
   verifyToken,
   isAdmin,
   viewForAdmin,
+);
+
+// * route buat SEO
+router.post(
+  '/article/:id/seo',
+  createSEO,
+);
+router.delete(
+  '/seo/:id',
+  deleteSEO,
 );
 
 module.exports = router;

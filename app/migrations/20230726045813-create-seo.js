@@ -2,26 +2,17 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Articles', {
+    await queryInterface.createTable('SEOs', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      id_user: {
+      id_article: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'users',
-          key: 'id',
-        },
-        onDelete: 'CASCADE',
-        onUpdate: 'CASCADE',
-      },
-      id_category: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'categories',
+          model: 'articles',
           key: 'id',
         },
         onDelete: 'CASCADE',
@@ -30,20 +21,14 @@ module.exports = {
       title: {
         type: Sequelize.STRING,
       },
-      author: {
-        type: Sequelize.STRING,
-      },
-      content: {
+      desc: {
         type: Sequelize.TEXT,
       },
-      viewers: {
-        type: Sequelize.INTEGER,
-      },
-      cover: {
+      logo: {
         type: Sequelize.STRING,
       },
-      important: {
-        type: Sequelize.BOOLEAN,
+      keywords: {
+        type: Sequelize.STRING,
       },
       createdAt: {
         allowNull: false,
@@ -56,6 +41,6 @@ module.exports = {
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Articles');
+    await queryInterface.dropTable('SEOs');
   },
 };

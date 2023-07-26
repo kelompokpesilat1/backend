@@ -17,6 +17,9 @@ module.exports = (sequelize, DataTypes) => {
       Article.hasMany(models.Comments, {
         foreignKey: 'id_article',
       });
+      Article.hasOne(models.SEO, {
+        foreignKey: 'id_article',
+      });
       Article.belongsTo(models.Category, {
         foreignKey: 'id_category',
       });
