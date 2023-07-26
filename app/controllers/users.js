@@ -21,6 +21,18 @@ const getUsers = (req, res) => {
   });
 };
 
+const getUsersByAuth = (req, res) => {
+  User.findByPk(req.userId).then((data) => {
+    res.send({
+      status: 'success',
+      message: 'berhasil menampilkan data',
+      data,
+    });
+  }).catch((err) => {
+    res.status(400).send(err.message);
+  });
+};
+
 const getUserById = (req, res) => {
   User.findByPk(req.params.id)
     .then((user) => {
@@ -221,6 +233,7 @@ const searchUser = (req, res) => {
 
 module.exports = {
   getUsers,
+  getUsersByAuth,
   getUserById,
   getUserByRoles,
   editUserByAdmin,
