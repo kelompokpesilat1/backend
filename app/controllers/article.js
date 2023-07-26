@@ -1,43 +1,51 @@
+/* eslint-disable quotes */
+/* eslint-disable object-shorthand */
 /* eslint-disable no-param-reassign */
-const { Op } = require('sequelize');
-const { Article } = require('../models');
-const { Comments } = require('../models');
+const { Op } = require("sequelize");
+const { Article } = require("../models");
+const { Comments } = require("../models");
+const { Category } = require("../models");
 
-const addArticles = (req, res) => {
-  const { userId } = req;
-  const { category } = req.body;
-  const {
-    title, author, cover, important, content,
-  } = req.body;
+const addArticles = async (req, res) => {
+  const categoryName = req.body.category;
+  const userId = req.userId;
+  const category = await Category.findOne({
+    where: { category: categoryName },
+  });
+  console.log(category);
+  const { title, author, cover, important, content } = req.body;
   Article.create({
     id_user: userId,
-    id_category: category,
+    id_category: category.id,
     title,
-    author,
+    author: userId,
     cover,
     important,
     content,
   })
     .then((data) => {
       res.send({
-        status: 'success',
-        message: 'berhasil menampilkan data',
+        status: "success",
+        message: "berhasil menampilkan data",
         data,
       });
-    }).catch((err) => {
+    })
+    .catch((err) => {
       res.status(400).send(err.message);
     });
 };
 const getArticles = (req, res) => {
-  Article.findAll().then((data) => {
-    res.send({
-      status: 'success',
-      message: 'berhasil menampilkan data',
-      data,
+  Article.findAll()
+    .then((data) => {
+      res.send({
+        status: "success",
+        message: "berhasil menampilkan data",
+        data,
+      });
+    })
+    .catch((err) => {
+      res.status(400).send(err.message);
     });
-  }).catch((err) => {
-    res.status(400).send(err.message);
-  });
 };
 
 const getArticlesId = (req, res) => {
@@ -48,28 +56,31 @@ const getArticlesId = (req, res) => {
         where: {
           id_article: article.id,
         },
-      }).then((data) => {
-        res.status(200).send({
-          status: 'success',
-          message: 'berhasil menampilkan data',
-          category: {
-            title: article.title,
-            author: article.author,
-            cover: article.cover,
-            viewers: article.viewers,
-            content: article.content,
-            comments: data,
-          },
+      })
+        .then((data) => {
+          res.status(200).send({
+            status: "success",
+            message: "berhasil menampilkan data",
+            category: {
+              title: article.title,
+              author: article.author,
+              cover: article.cover,
+              viewers: article.viewers,
+              content: article.content,
+              comments: data,
+            },
+          });
+        })
+        .catch((err) => {
+          res.status(500).send({
+            message: "Error",
+            errors: err.message,
+          });
         });
-      }).catch((err) => {
-        res.status(500).send({
-          message: 'Error',
-          errors: err.message,
-        });
-      });
-    }).catch((err) => {
+    })
+    .catch((err) => {
       res.status(500).send({
-        message: 'Error',
+        message: "Error",
         errors: err.message,
       });
     });
@@ -82,30 +93,31 @@ const putArticles = (req, res) => {
     .then((article) => {
       if (!article) {
         return res.status(404).send({
-          status: 'error',
-          message: 'Article tidak ditemukan',
+          status: "error",
+          message: "Article tidak ditemukan",
         });
       }
-      article.update(req.body)
+      article
+        .update(req.body)
         .then((updatedArticle) => {
           res.status(200).send({
-            status: 'success',
-            message: 'Article berhasil diperbarui',
+            status: "success",
+            message: "Article berhasil diperbarui",
             data: updatedArticle,
           });
         })
         .catch((err) => {
           res.status(500).send({
-            status: 'error',
-            message: 'Terjadi kesalahan saat memperbarui artikel',
+            status: "error",
+            message: "Terjadi kesalahan saat memperbarui artikel",
             errors: err.message,
           });
         });
     })
     .catch((err) => {
       res.status(500).send({
-        status: 'error',
-        message: 'Terjadi kesalahan',
+        status: "error",
+        message: "Terjadi kesalahan",
         errors: err.message,
       });
     });
@@ -119,28 +131,28 @@ const deleteArticles = (req, res) => {
     .then((Article) => {
       if (!Article) {
         return res.status(404).send({
-          message: 'Article tidak ditemukan',
+          message: "Article tidak ditemukan",
         });
       }
       Article.destroy()
         .then(() => {
           res.status(200).send({
-            status: 'success',
-            message: 'Article berhasil dihapus',
+            status: "success",
+            message: "Article berhasil dihapus",
           });
         })
         .catch((err) => {
           res.status(500).send({
-            status: 'error',
-            message: 'Terjadi kesalahan saat menghapus artikel',
+            status: "error",
+            message: "Terjadi kesalahan saat menghapus artikel",
             errors: err.message,
           });
         });
     })
     .catch((err) => {
       res.status(500).send({
-        status: 'error',
-        message: 'Terjadi kesalahan',
+        status: "error",
+        message: "Terjadi kesalahan",
         errors: err.message,
       });
     });
@@ -154,32 +166,37 @@ const searchArticle = (req, res) => {
         [Op.like]: `%${searchQuery}%`,
       },
     },
-  }).then((data) => {
-    res.send({
-      status: 'success',
-      message: 'berhasil menampilkan data',
-      data,
+  })
+    .then((data) => {
+      res.send({
+        status: "success",
+        message: "berhasil menampilkan data",
+        data,
+      });
+    })
+    .catch((err) => {
+      res.status(400).send(err.message);
     });
-  }).catch((err) => {
-    res.status(400).send(err.message);
-  });
 };
 
 const viewersIncrement = (req, res, next) => {
   const { id } = req.params;
   Article.findByPk(id)
     .then((data) => {
-      data.increment({
-        viewers: 1,
-      }).catch((err) => {
-        res.status(500).send({
-          message: 'Error',
-          errors: err.message,
+      data
+        .increment({
+          viewers: 1,
+        })
+        .catch((err) => {
+          res.status(500).send({
+            message: "Error",
+            errors: err.message,
+          });
         });
-      });
-    }).catch((err) => {
+    })
+    .catch((err) => {
       res.status(500).send({
-        message: 'Error',
+        message: "Error",
         errors: err.message,
       });
     });

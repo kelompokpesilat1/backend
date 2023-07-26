@@ -2,8 +2,8 @@
 /* eslint-disable no-tabs */
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable no-undef */
-const express = require('express');
-const multer = require('multer');
+const express = require("express");
+const multer = require("multer");
 
 const {
   getArticles,
@@ -11,7 +11,7 @@ const {
   viewersIncrement,
   getArticlesId,
   addArticles,
-} = require('../controllers/article');
+} = require("../controllers/article");
 
 const {
   getUsers,
@@ -22,7 +22,7 @@ const {
   deleteUserByUser,
   searchUser,
   getUsersByAuth,
-} = require('../controllers/users');
+} = require("../controllers/users");
 
 const {
   addCategory,
@@ -30,22 +30,30 @@ const {
   deleteCategoryById,
   getCategory,
   getCategoryById,
-} = require('../controllers/category');
+} = require("../controllers/category");
 
-const { getRoles, getRoleById } = require('../controllers/roles');
-const { checkDuplicateEmail, register } = require('../controllers/register');
-const { login } = require('../controllers/login');
-const { createComment, deleteComment, editCommentByUser } = require('../controllers/comment');
-const { verifyToken, isAuthor, isAdmin } = require('../middleware/verifyJwtToken');
-const { viewForAdmin, viewAuthor } = require('../controllers/view');
-const { createSEO, deleteSEO } = require('../controllers/seo');
+const { getRoles, getRoleById } = require("../controllers/roles");
+const { checkDuplicateEmail, register } = require("../controllers/register");
+const { login } = require("../controllers/login");
+const {
+  createComment,
+  deleteComment,
+  editCommentByUser,
+} = require("../controllers/comment");
+const {
+  verifyToken,
+  isAuthor,
+  isAdmin,
+} = require("../middleware/verifyJwtToken");
+const { viewForAdmin, viewAuthor } = require("../controllers/view");
+const { createSEO, deleteSEO } = require("../controllers/seo");
 
 const router = express.Router();
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     // Specify the destination directory where files will be stored
-    cb(null, './assets');
+    cb(null, "./assets");
   },
   filename: (req, file, cb) => {
     // Customize the filename (optional)
@@ -60,153 +68,50 @@ const upload = multer({ storage });
 // eslint-disable-next-line no-unused-vars
 
 // * route regis and login
-router.post(
-  '/register',
-  checkDuplicateEmail,
-  register,
-
-);
-router.post(
-  '/login',
-  login,
-
-);
+router.post("/register", checkDuplicateEmail, register);
+router.post("/login", login);
 
 // * route article
-router.get(
-  '/articles',
-  getArticles,
-);
-router.get(
-  '/articles/:id',
-  viewersIncrement,
-  getArticlesId,
-);
-router.get(
-  '/articles/search/:q',
-  searchArticle,
-);
-router.post(
-  '/addArticle',
-  addArticles,
-);
+router.get("/articles", getArticles);
+router.get("/articles/:id", viewersIncrement, getArticlesId);
+router.get("/articles/search/:q", searchArticle);
+router.post("/addArticle", verifyToken, isAuthor, addArticles);
 
 // * route user
-router.get(
-  '/users',
-  getUsers,
-);
-router.get(
-  '/user/:id',
-  getUserById,
-);
-router.get(
-  '/userByAuth',
-  verifyToken,
-  getUsersByAuth,
-);
-router.get(
-  '/user/search/:q',
-  searchUser,
-);
-router.put(
-  '/user/editAdmin/:id',
-  verifyToken,
-  isAdmin,
-  editUserByAdmin,
-);
-router.delete(
-  '/user/deleteAdmin',
-  verifyToken,
-  isAdmin,
-  deleteUserByAdmin,
-);
-router.put(
-  '/user/edit',
-  verifyToken,
-  editUserByUser,
-);
-router.delete(
-  '/user/delete',
-  verifyToken,
-  deleteUserByUser,
-);
+router.get("/users", getUsers);
+router.get("/user/:id", getUserById);
+router.get("/userByAuth", verifyToken, getUsersByAuth);
+router.get("/user/search/:q", searchUser);
+router.put("/user/editAdmin/:id", verifyToken, isAdmin, editUserByAdmin);
+router.delete("/user/deleteAdmin", verifyToken, isAdmin, deleteUserByAdmin);
+router.put("/user/edit", verifyToken, editUserByUser);
+router.delete("/user/delete", verifyToken, deleteUserByUser);
 
 // * route category
-router.post(
-  '/category',
-  addCategory,
-);
-router.get(
-  '/category',
-  getCategory,
-);
-router.get(
-  '/category/:id',
-  getCategoryById,
-);
-router.put(
-  '/category/:id',
-  updateCategoryById,
-);
-router.delete(
-  '/category/:id',
-  deleteCategoryById,
-);
+router.post("/category", addCategory);
+router.get("/category", getCategory);
+router.get("/category/:id", getCategoryById);
+router.put("/category/:id", updateCategoryById);
+router.delete("/category/:id", deleteCategoryById);
 
 // * route roles
-router.get(
-  '/roles',
-  getRoles,
-);
-router.get(
-  '/role/:id',
-  getRoleById,
-);
+router.get("/roles", getRoles);
+router.get("/role/:id", getRoleById);
 
 // * route comment
-router.post(
-  '/article/:id/comment',
-  verifyToken,
-  createComment,
-);
+router.post("/article/:id/comment", verifyToken, createComment);
 
-router.delete(
-  '/article/comment/:id',
-  verifyToken,
-  deleteComment,
-);
+router.delete("/article/comment/:id", verifyToken, deleteComment);
 
-router.put(
-  '/article/editcomment/:id',
-  verifyToken,
-  editCommentByUser,
-);
+router.put("/article/editcomment/:id", verifyToken, editCommentByUser);
 
 // * route buat view
-router.get(
-  '/author/view',
-  verifyToken,
-  isAuthor,
-  viewAuthor,
-);
+router.get("/author/view", verifyToken, isAuthor, viewAuthor);
 
-router.get(
-  '/admin/view',
-  verifyToken,
-  isAdmin,
-  viewForAdmin,
-);
+router.get("/admin/view", verifyToken, isAdmin, viewForAdmin);
 
 // * route buat SEO
-router.post(
-  '/article/:id/seo',
-  upload.single('logo'),
-  createSEO,
-);
-router.delete(
-  '/seo/:id',
-  deleteSEO,
-);
+router.post("/article/:id/seo", upload.single("logo"), createSEO);
+router.delete("/seo/:id", deleteSEO);
 
 module.exports = router;
