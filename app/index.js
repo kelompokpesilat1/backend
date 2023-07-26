@@ -24,11 +24,10 @@ try {
   console.error('Unable to connect to the database:', error);
 }
 
-app.use(cors());
+app.use('/assets', express.static('assets'));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-  extended: true,
-}));
+app.use(cors());
 app.use(router);
 
 app.listen(port, () => {

@@ -2,14 +2,14 @@ const { SEO } = require('../models');
 
 const createSEO = (req, res) => {
   const {
-    title, desc, logo, keywords,
+    title, desc, keywords,
   } = req.body;
   const { id } = req.params;
   SEO.create({
     id_article: id,
     title,
     desc,
-    logo,
+    logo: req.file.path,
     keywords,
   }).then((data) => {
     res.send({

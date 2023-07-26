@@ -1,7 +1,10 @@
+/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable no-tabs */
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable no-undef */
 const express = require('express');
+const multer = require('multer');
+
 const {
   getArticles,
   searchArticle,
@@ -38,6 +41,20 @@ const { viewForAdmin, viewAuthor } = require('../controllers/view');
 const { createSEO, deleteSEO } = require('../controllers/seo');
 
 const router = express.Router();
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    // Specify the destination directory where files will be stored
+    cb(null, './assets');
+  },
+  filename: (req, file, cb) => {
+    // Customize the filename (optional)
+    // In this example, we keep the original filename
+    cb(null, file.originalname);
+  },
+});
+
+const upload = multer({ storage });
 
 /* GET home page. */
 // eslint-disable-next-line no-unused-vars
@@ -184,6 +201,7 @@ router.get(
 // * route buat SEO
 router.post(
   '/article/:id/seo',
+  upload.single('logo'),
   createSEO,
 );
 router.delete(
