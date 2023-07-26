@@ -61,7 +61,7 @@ const getArticlesId = (req, res) => {
                res.status(200).send({
                   status: 'success',
                   message: 'berhasil menampilkan data',
-                  data: {
+                  category: {
                      title: article.title,
                      author: article.author,
                      cover: article.cover,
