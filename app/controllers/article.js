@@ -40,7 +40,7 @@ const getArticles = (req, res) => {
   });
 };
 
-const getArticlesById = (req, res) => {
+const getArticlesId = (req, res) => {
   Article.findByPk(req.params.id)
     .then((article) => {
       article.viewers += 1;
@@ -86,7 +86,7 @@ const putArticles = (req, res) => {
           message: 'Article tidak ditemukan',
         });
       }
-  article.update(req.body)
+      article.update(req.body)
         .then((updatedArticle) => {
           res.status(200).send({
             status: 'success',
@@ -111,41 +111,41 @@ const putArticles = (req, res) => {
     });
 };
 
-  const deleteArticles = (req, res) => {
-    const ArticleId = req.params.id;
-    const { role } = req.userId;
-  
-    Article.findByPk(ArticleId)
-      .then((Article) => {
-        if (!Article) {
-          return res.status(404).send({
-            message: 'Article tidak ditemukan',
-          });
-        }
-        Article.destroy()
-          .then(() => {
-            res.status(200).send({
-              status: 'success',
-              message: 'Article berhasil dihapus',
-            });
-          })
-          .catch((err) => {
-            res.status(500).send({
-              status: 'error',
-              message: 'Terjadi kesalahan saat menghapus artikel',
-              errors: err.message,
-            });
-          });
-      })
-      .catch((err) => {
-        res.status(500).send({
-          status: 'error',
-          message: 'Terjadi kesalahan',
-          errors: err.message,
+const deleteArticles = (req, res) => {
+  const ArticleId = req.params.id;
+  const { role } = req.userId;
+
+  Article.findByPk(ArticleId)
+    .then((Article) => {
+      if (!Article) {
+        return res.status(404).send({
+          message: 'Article tidak ditemukan',
         });
+      }
+      Article.destroy()
+        .then(() => {
+          res.status(200).send({
+            status: 'success',
+            message: 'Article berhasil dihapus',
+          });
+        })
+        .catch((err) => {
+          res.status(500).send({
+            status: 'error',
+            message: 'Terjadi kesalahan saat menghapus artikel',
+            errors: err.message,
+          });
+        });
+    })
+    .catch((err) => {
+      res.status(500).send({
+        status: 'error',
+        message: 'Terjadi kesalahan',
+        errors: err.message,
       });
-  };  
-  
+    });
+};
+
 const searchArticle = (req, res) => {
   const searchQuery = req.params.id;
   Article.findAll({
@@ -189,7 +189,7 @@ const viewersIncrement = (req, res, next) => {
 module.exports = {
   addArticles,
   getArticles,
-  getArticlesById,
+  getArticlesId,
   putArticles,
   searchArticle,
   deleteArticles,

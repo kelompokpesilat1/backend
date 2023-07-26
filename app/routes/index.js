@@ -4,10 +4,10 @@
 const express = require('express');
 const {
   getArticles,
-  getArticleById,
   searchArticle,
   viewersIncrement,
-  addArticle,
+  getArticlesId,
+  addArticles,
 } = require('../controllers/article');
 
 const {
@@ -62,7 +62,7 @@ router.get(
 router.get(
   '/articles/:id',
   viewersIncrement,
-  getArticleById,
+  getArticlesId,
 );
 router.get(
   '/articles/search/:q',
@@ -70,7 +70,7 @@ router.get(
 );
 router.post(
   '/addArticle',
-  addArticle,
+  addArticles,
 );
 
 // * route user
