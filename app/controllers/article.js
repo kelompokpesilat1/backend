@@ -8,12 +8,14 @@ const { Category } = require("../models");
 
 const addArticles = async (req, res) => {
   const categoryName = req.body.category;
-  const userId = req.userId;
+  const { userId } = req;
   const category = await Category.findOne({
     where: { category: categoryName },
   });
   console.log(category);
-  const { title, author, cover, important, content } = req.body;
+  const {
+    title, author, cover, important, content,
+  } = req.body;
   Article.create({
     id_user: userId,
     id_category: category.id,
@@ -37,6 +39,7 @@ const addArticles = async (req, res) => {
 const getArticles = (req, res) => {
   Article.findAll()
     .then((data) => {
+      Category.findByPk(data.id_category)
       res.send({
         status: "success",
         message: "berhasil menampilkan data",
@@ -58,17 +61,29 @@ const getArticlesId = (req, res) => {
         },
       })
         .then((data) => {
-          res.status(200).send({
-            status: "success",
-            message: "berhasil menampilkan data",
-            category: {
-              title: article.title,
-              author: article.author,
-              cover: article.cover,
-              viewers: article.viewers,
-              content: article.content,
-              comments: data,
+          Category.findOne({
+            where: {
+              id: article.id_category,
             },
+          }).then((result) => {
+            res.status(200).send({
+              status: "success",
+              message: "berhasil menampilkan data",
+              category: result.category,
+              article: {
+                title: article.title,
+                author: article.author,
+                cover: article.cover,
+                viewers: article.viewers,
+                content: article.content,
+                comments: data,
+              },
+            });
+          }).catch((err) => {
+            res.status(500).send({
+              message: "Error",
+              errors: err.message,
+            });
           });
         })
         .catch((err) => {
