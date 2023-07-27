@@ -153,47 +153,6 @@ const editUserByAdmin = (req, res) => {
       });
    return;
 };
-
-if (email) {
-   if (!emailRegex.test(email)) {
-      res.status(401).send({
-         status: 'failed',
-         message: 'maaf email tidak valid'
-      });
-      return;
-   }
-}
-User.findByPk(id)
-   .then((user) => {
-      user
-         .update({
-            name,
-            email,
-            password,
-            foto: req.file.path,
-            id_roles
-         })
-         .then((data) => {
-            res.status(200).send({
-               status: 'success',
-               message: 'berhasil mengupdate data',
-               data
-            });
-         })
-         .catch((err) => {
-            res.status(500).send({
-               message: 'gagal mengupdate data',
-               errors: err.message
-            });
-         });
-   })
-   .catch((err) => {
-      res.status(500).send({
-         message: 'user tidak ditemukan',
-         errors: err.message
-      });
-   });
-
 const deleteUserByAdmin = (req, res) => {
    const { userId } = req.body;
    User.destroy({
