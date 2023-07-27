@@ -22,7 +22,7 @@ const addArticles = async (req, res) => {
     id_category: category.id,
     title,
     author: userId,
-    cover,
+    cover: req.file.path
     important,
     content,
   })
