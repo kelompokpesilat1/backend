@@ -75,7 +75,9 @@ router.post('/login', login);
 router.get('/articles', getArticles);
 router.get('/articles/:id', viewersIncrement, getArticlesId);
 router.get('/articles/search/:q', searchArticle);
-router.post('/addArticle', verifyToken, isAuthor, addArticles);
+router.post('/addArticle', upload.single('cover'), verifyToken, isAuthor, addArticles);
+router.delete('/articles/delete/:id', verifyToken, isAuthor, deleteArticlesById);
+router.put('/articles/update/:id', verifyToken, isAuthor, putArticlesById );
 
 // * route user
 router.get('/users', getUsers);
