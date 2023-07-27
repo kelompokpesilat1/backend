@@ -7,19 +7,19 @@ module.exports = {
          'categories',
          [
             {
-               category: 'olahraga'
+               name: 'olahraga'
             },
             {
-               category: 'edukasi'
+               name: 'edukasi'
             },
             {
-               category: 'gaming'
+               name: 'gaming'
             },
             {
-               category: 'pendidikan'
+               name: 'pendidikan'
             },
             {
-               category: 'hiburan'
+               name: 'hiburan'
             }
          ],
          {}

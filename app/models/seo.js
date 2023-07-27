@@ -14,7 +14,6 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   SEO.init({
-    id_article: DataTypes.INTEGER,
     title: DataTypes.STRING,
     desc: DataTypes.TEXT,
     logo: DataTypes.STRING,

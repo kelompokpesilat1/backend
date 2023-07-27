@@ -118,7 +118,6 @@ const deleteCategoryById = async (req, res) => {
     });
   }
 };
-
 module.exports = {
   addCategory, getCategory, getCategoryById, updateCategoryById, deleteCategoryById,
 };

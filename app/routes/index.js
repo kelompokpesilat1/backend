@@ -3,18 +3,15 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable no-undef */
 const express = require('express');
-const multer = require('multer');
-
 const {
-   getArticles,
-   searchArticle,
-   viewersIncrement,
-   getArticlesId,
    addArticles,
-   deleteArticles,
-   putArticles
+   getArticles,
+   getArticlesById,
+   putArticlesById,
+   deleteArticlesById,
+   searchArticle,
+   viewersIncrement
 } = require('../controllers/article');
-
 const {
    getUsers,
    getUserById,
@@ -25,15 +22,13 @@ const {
    searchUser,
    getUsersByAuth
 } = require('../controllers/users');
-
 const {
    addCategory,
-   updateCategoryById,
-   deleteCategoryById,
    getCategory,
-   getCategoryById
+   getCategoryById,
+   updateCategoryById,
+   deleteCategoryById
 } = require('../controllers/category');
-
 const { getRoles, getRoleById } = require('../controllers/roles');
 const { checkDuplicateEmail, register } = require('../controllers/register');
 const { login } = require('../controllers/login');
@@ -45,12 +40,14 @@ const {
 const {
    verifyToken,
    isAuthor,
-   isAdmin
+   isAdmin,
+   isAuthorOrAdmin
 } = require('../middleware/verifyJwtToken');
 const { viewForAdmin, viewAuthor } = require('../controllers/view');
-const { createSEO, deleteSEO } = require('../controllers/seo');
+const { createSEO, updateSEO, getSEO } = require('../controllers/seo');
 
 const router = express.Router();
+const multer = require('multer');
 
 const storage = multer.diskStorage({
    destination: (req, file, cb) => {
@@ -66,30 +63,49 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-/* GET home page. */
-// eslint-disable-next-line no-unused-vars
-
-// * route regis and login
 router.post('/register', checkDuplicateEmail, register);
 router.post('/login', login);
 
 // * route article
+router.post(
+   '/articles',
+   upload.single('cover'),
+   verifyToken,
+   isAuthor,
+   addArticles
+);
 router.get('/articles', getArticles);
-router.get('/articles/:id', viewersIncrement, getArticlesId);
+router.get('/articles/:id', viewersIncrement, getArticlesById);
 router.get('/articles/search/:q', searchArticle);
-router.post('/addArticle', upload.single('cover'), verifyToken, isAuthor, addArticles);
-router.delete('/articles/delete/:id', verifyToken, isAuthor, deleteArticles);
-router.put('/articles/update/:id', verifyToken, isAuthor, putArticles);
+router.post(
+   '/addArticle',
+   upload.single('cover'),
+   verifyToken,
+   isAuthorOrAdmin,
+   addArticles
+);
+router.delete(
+   '/articles/delete/:id',
+   verifyToken,
+   isAuthor,
+   deleteArticlesById
+);
+router.put('/articles/update/:id', verifyToken, isAuthor, putArticlesById);
 
 // * route user
 router.get('/users', getUsers);
 router.get('/user/:id', getUserById);
 router.get('/userByAuth', verifyToken, getUsersByAuth);
 router.get('/user/search/:q', searchUser);
-router.put('/user/editAdmin/:id', verifyToken, isAdmin, upload.single('foto'), editUserByAdmin);
-router.delete('/user/deleteAdmin', verifyToken, isAdmin, deleteUserByAdmin);
-router.put('/user/edit', verifyToken, upload.single('foto'), editUserByUser);
-router.delete('/user/delete', verifyToken, deleteUserByUser);
+router.put('/user/editAdmin/:id', verifyToken, isAdmin, editUserByAdmin);
+router.delete('/user/deleteAdmin/:id', verifyToken, isAdmin, deleteUserByAdmin);
+router.put(
+   '/user/edit/:id',
+   verifyToken,
+   upload.single('foto'),
+   editUserByUser
+);
+router.delete('/user/delete/:id', verifyToken, deleteUserByUser);
 
 // * route category
 router.post('/category', addCategory);
@@ -104,18 +120,22 @@ router.get('/role/:id', getRoleById);
 
 // * route comment
 router.post('/article/:id/comment', verifyToken, createComment);
-
 router.delete('/article/comment/:id', verifyToken, deleteComment);
-
 router.put('/article/editcomment/:id', verifyToken, editCommentByUser);
 
 // * route buat view
 router.get('/author/view', verifyToken, isAuthor, viewAuthor);
-
 router.get('/admin/view', verifyToken, isAdmin, viewForAdmin);
 
 // * route buat SEO
-router.post('/article/:id/seo', upload.single('logo'), createSEO);
-router.delete('/seo/:id', deleteSEO);
+router.post('/addseo', verifyToken, isAuthor, upload.single('logo'), createSEO);
+router.get('/seo', getSEO, verifyToken, isAuthor);
+router.put(
+   '/updateseo/:id',
+   verifyToken,
+   upload.single('logo'),
+   isAuthor,
+   updateSEO
+);
 
 module.exports = router;
