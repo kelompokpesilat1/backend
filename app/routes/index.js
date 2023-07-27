@@ -10,7 +10,9 @@ const {
    searchArticle,
    viewersIncrement,
    getArticlesId,
-   addArticles
+   addArticles,
+   deleteArticles,
+   putArticles
 } = require('../controllers/article');
 
 const {
@@ -75,7 +77,9 @@ router.post('/login', login);
 router.get('/articles', getArticles);
 router.get('/articles/:id', viewersIncrement, getArticlesId);
 router.get('/articles/search/:q', searchArticle);
-router.post('/addArticle', verifyToken, isAuthor, addArticles);
+router.post('/addArticle', upload.single('cover'), verifyToken, isAuthor, addArticles);
+router.delete('/articles/delete/:id', verifyToken, isAuthor, deleteArticles);
+router.put('/articles/update/:id', verifyToken, isAuthor, putArticles);
 
 // * route user
 router.get('/users', getUsers);
@@ -91,8 +95,8 @@ router.delete('/user/delete', verifyToken, deleteUserByUser);
 router.post('/category', addCategory);
 router.get('/category', getCategory);
 router.get('/category/:id', getCategoryById);
-router.put('/category/:id', updateCategoryById);
-router.delete('/category/:id', deleteCategoryById);
+router.put('/category/update/:id', updateCategoryById);
+router.delete('/category/delete/:id', deleteCategoryById);
 
 // * route roles
 router.get('/roles', getRoles);
