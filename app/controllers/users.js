@@ -153,10 +153,6 @@ const editUserByAdmin = (req, res) => {
    return;
 };
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 8dc194b39b1a83321e5ebd1c3699a0290ad98b65
 const deleteUserByAdmin = (req, res) => {
    const { userId } = req.body;
    User.destroy({

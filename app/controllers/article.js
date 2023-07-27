@@ -69,13 +69,9 @@ const getArticlesById = async (req, res) => {
       res.status(200).send({
          status: 'success',
          message: 'berhasil menampilkan data',
-         data: {
-            category: category.name,
-            data: {
-               article,
-               comment: comment
-            }
-         }
+         category: category.name,
+         article,
+         comment
       });
    } catch (error) {
       res.status(500).send({
