@@ -36,7 +36,33 @@ const getCategory = (req, res) => {
 };
 
 const getCategoryById = (req, res) => {
-res.send('ok')
+  Category.findByPk(req.params.id)
+    .then((category) => {
+      Article.findAll({
+        where: {
+          id_category: category.id,
+        },
+      }).then((data) => {
+        res.status(200).send({
+          status: 'success',
+          message: 'berhasil menampilkan data',
+          category: {
+            kategory: category.category,
+            article: data,
+          },
+        });
+      }).catch((err) => {
+        res.status(500).send({
+          message: 'Error',
+          errors: err.message,
+        });
+      });
+    }).catch((err) => {
+      res.status(500).send({
+        message: 'Error',
+        errors: err.message,
+      });
+    });
 };
 
 const updateCategoryById = (req, res) => {
