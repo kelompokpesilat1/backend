@@ -47,7 +47,7 @@ const getCategoryById = async (req, res) => {
       status: 'success',
       message: 'berhasil menampilkan data',
       data: {
-        kategory: category.category,
+        kategory: category.name,
         article,
       },
     });

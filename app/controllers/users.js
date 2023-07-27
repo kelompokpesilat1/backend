@@ -38,45 +38,42 @@ const getUsersByAuth = (req, res) => {
 };
 
 const getUserById = (req, res) => {
-   User.findByPk(req.params.id)
-      .then((user) => {
-         if (!user) {
-            return res.send({
-               status: 'failed',
-               message: 'maaf user yang anda cari tidak ada'
-            });
-         }
-         Article.findAll({
-            where: {
-               id_user: user.id
-            }
-         })
-            .then((data) => {
-               res.status(200).send({
-                  status: 'success',
-                  message: 'berhasil menampilkan data',
-                  user: {
-                     name: user.name,
-                     email: user.email,
-                     foto: user.foto,
-                     article: data
-                  }
-               });
-            })
-            .catch((err) => {
-               res.status(500).send({
-                  message: 'Error',
-                  errors: err.message
-               });
-            });
+  User.findByPk(req.params.id, { include: Roles })
+    .then((user) => {
+      if (!user) {
+        return res.send({
+          status: 'failed',
+          message: 'maaf user yang anda cari tidak ada',
+        });
+      }
+      Article.findAll({
+        where: {
+          id_user: user.id,
+        },
       })
-      .catch((err) => {
-         res.status(500).send({
+        .then((data) => {
+          res.status(200).send({
+            status: 'success',
+            message: 'berhasil menampilkan data',
+            data: {
+              user: {
+                roles: user.Role.name,
+                name: user.name,
+                email: user.email,
+                foto: user.foto,
+                article: data,
+              },
+            },
+          });
+        })
+        .catch((err) => {
+          res.status(500).send({
             message: 'Error',
             errors: err.message
          });
       });
-};
+})
+}
 
 const getUserByRoles = (req, res) => {
    Roles.findByPk(req.params.id)
