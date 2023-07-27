@@ -5,28 +5,28 @@
 const express = require('express');
 const { addArticles, getArticles, getArticlesById, putArticlesById, deleteArticlesById, searchArticle, viewersIncrement } = require('../controllers/article');
 const {
-  getUsers,
-  getUserById,
-  editUserByAdmin,
-  deleteUserByAdmin,
-  editUserByUser,
-  deleteUserByUser,
-  searchUser,
-  getUsersByAuth,
+   getUsers,
+   getUserById,
+   editUserByAdmin,
+   deleteUserByAdmin,
+   editUserByUser,
+   deleteUserByUser,
+   searchUser,
+   getUsersByAuth
 } = require('../controllers/users');
 const { addCategory, getCategory, getCategoryById, updateCategoryById, deleteCategoryById} = require('../controllers/category');
 const { getRoles, getRoleById } = require('../controllers/roles');
 const { checkDuplicateEmail, register } = require('../controllers/register');
 const { login } = require('../controllers/login');
 const {
-  createComment,
-  deleteComment,
-  editCommentByUser,
+   createComment,
+   deleteComment,
+   editCommentByUser
 } = require('../controllers/comment');
 const {
-  verifyToken,
-  isAuthor,
-  isAdmin,
+   verifyToken,
+   isAuthor,
+   isAdmin
 } = require('../middleware/verifyJwtToken');
 const { viewForAdmin, viewAuthor } = require('../controllers/view');
 const { createSEO, updateSEO, getSEO} = require('../controllers/seo');
@@ -35,15 +35,15 @@ const router = express.Router();
 const multer = require('multer');
 
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    // Specify the destination directory where files will be stored
-    cb(null, './assets');
-  },
-  filename: (req, file, cb) => {
-    // Customize the filename (optional)
-    // In this example, we keep the original filename
-    cb(null, file.originalname);
-  },
+   destination: (req, file, cb) => {
+      // Specify the destination directory where files will be stored
+      cb(null, './assets');
+   },
+   filename: (req, file, cb) => {
+      // Customize the filename (optional)
+      // In this example, we keep the original filename
+      cb(null, file.originalname);
+   }
 });
 
 const upload = multer({ storage });
@@ -56,6 +56,7 @@ router.post('/articles', upload.single('cover'), verifyToken, isAuthor, addArtic
 router.get('/articles', getArticles);
 router.get('/articles/:id', viewersIncrement, getArticlesById);
 router.get('/articles/search/:q', searchArticle);
+router.post('/addArticle', upload.single('cover'), verifyToken, isAuthor, addArticles);
 router.delete('/articles/delete/:id', verifyToken, isAuthor, deleteArticlesById);
 router.put('/articles/update/:id', verifyToken, isAuthor, putArticlesById );
 
