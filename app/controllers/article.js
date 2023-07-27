@@ -15,7 +15,7 @@ const addArticles = async (req, res) => {
   });
   console.log(category);
   const {
-    title, cover, important, content,
+    title, important, content,
   } = req.body;
   Article.create({
     id_user: userId,
