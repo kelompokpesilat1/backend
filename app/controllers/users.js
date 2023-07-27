@@ -40,6 +40,12 @@ const getUsersByAuth = (req, res) => {
 const getUserById = (req, res) => {
    User.findByPk(req.params.id)
       .then((user) => {
+         if (!user) {
+            return res.send({
+               status: 'failed',
+               message: 'maaf user yang anda cari tidak ada'
+            });
+         }
          Article.findAll({
             where: {
                id_user: user.id
@@ -53,7 +59,6 @@ const getUserById = (req, res) => {
                      name: user.name,
                      email: user.email,
                      foto: user.foto,
-                     id_roles: user.id_roles,
                      article: data
                   }
                });
@@ -149,7 +154,48 @@ const editUserByAdmin = (req, res) => {
             errors: err.message
          });
       });
+   return;
 };
+
+if (email) {
+   if (!emailRegex.test(email)) {
+      res.status(401).send({
+         status: 'failed',
+         message: 'maaf email tidak valid'
+      });
+      return;
+   }
+}
+User.findByPk(id)
+   .then((user) => {
+      user
+         .update({
+            name,
+            email,
+            password,
+            foto: req.file.path,
+            id_roles
+         })
+         .then((data) => {
+            res.status(200).send({
+               status: 'success',
+               message: 'berhasil mengupdate data',
+               data
+            });
+         })
+         .catch((err) => {
+            res.status(500).send({
+               message: 'gagal mengupdate data',
+               errors: err.message
+            });
+         });
+   })
+   .catch((err) => {
+      res.status(500).send({
+         message: 'user tidak ditemukan',
+         errors: err.message
+      });
+   });
 
 const deleteUserByAdmin = (req, res) => {
    const { userId } = req.body;
@@ -174,22 +220,44 @@ const deleteUserByAdmin = (req, res) => {
 };
 
 const editUserByUser = (req, res) => {
-   const { name, password, foto } = req.body;
+   const { name, email, password } = req.body;
+
+   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+   const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+
+   if (password) {
+      if (!passwordRegex.test(req.body.password)) {
+         res.status(401).send({
+            status: 'failed',
+            message: 'maaf password tidak valid'
+         });
+         return;
+      }
+   }
+   if (email) {
+      if (!emailRegex.test(email)) {
+         res.status(401).send({
+            status: 'failed',
+            message: 'maaf email tidak valid'
+         });
+         return;
+      }
+   }
    User.findByPk(req.userId)
       .then((user) => {
          user
             .update({
                name,
+               email,
                password,
-               foto
+               foto: req.file.path
             })
             .then((data) => {
                res.status(200).send({
                   status: 'success',
                   message: 'berhasil mengupdate data',
-                  category: {
-                     data
-                  }
+                  data
                });
             })
             .catch((err) => {

@@ -9,15 +9,6 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      id_article: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'articles',
-          key: 'id',
-        },
-        onDelete: 'CASCADE',
-        onUpdate: 'CASCADE',
-      },
       title: {
         type: Sequelize.STRING,
       },

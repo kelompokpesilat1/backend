@@ -82,9 +82,9 @@ router.get('/users', getUsers);
 router.get('/user/:id', getUserById);
 router.get('/userByAuth', verifyToken, getUsersByAuth);
 router.get('/user/search/:q', searchUser);
-router.put('/user/editAdmin/:id', verifyToken, isAdmin, editUserByAdmin);
+router.put('/user/editAdmin/:id', verifyToken, isAdmin, upload.single('foto'), editUserByAdmin);
 router.delete('/user/deleteAdmin', verifyToken, isAdmin, deleteUserByAdmin);
-router.put('/user/edit', verifyToken, editUserByUser);
+router.put('/user/edit', verifyToken, upload.single('foto'), editUserByUser);
 router.delete('/user/delete', verifyToken, deleteUserByUser);
 
 // * route category

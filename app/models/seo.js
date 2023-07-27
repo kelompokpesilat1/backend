@@ -11,9 +11,6 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      SEO.belongsTo(models.Article, {
-        foreignKey: 'id_article',
-      });
     }
   }
   SEO.init({
