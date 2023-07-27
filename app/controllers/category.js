@@ -46,7 +46,7 @@ const getCategoryById = (req, res) => {
         res.status(200).send({
           status: 'success',
           message: 'berhasil menampilkan data',
-          category: {
+          data: {
             kategory: category.category,
             article: data,
           },
