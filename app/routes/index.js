@@ -12,8 +12,7 @@ const {
    getArticlesId,
    addArticles,
    deleteArticles,
-   putArticles,
-
+   putArticles
 } = require('../controllers/article');
 
 const {
