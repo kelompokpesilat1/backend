@@ -93,8 +93,8 @@ router.delete('/user/delete', verifyToken, deleteUserByUser);
 router.post('/category', addCategory);
 router.get('/category', getCategory);
 router.get('/category/:id', getCategoryById);
-router.put('/category/:id', updateCategoryById);
-router.delete('/category/:id', deleteCategoryById);
+router.put('/category/update/:id', updateCategoryById);
+router.delete('/category/delete/:id', deleteCategoryById);
 
 // * route roles
 router.get('/roles', getRoles);
