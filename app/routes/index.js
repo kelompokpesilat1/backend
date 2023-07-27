@@ -6,44 +6,44 @@ const express = require('express');
 const multer = require('multer');
 
 const {
-  getArticles,
-  searchArticle,
-  viewersIncrement,
-  getArticlesId,
-  addArticles,
+   getArticles,
+   searchArticle,
+   viewersIncrement,
+   getArticlesId,
+   addArticles
 } = require('../controllers/article');
 
 const {
-  getUsers,
-  getUserById,
-  editUserByAdmin,
-  deleteUserByAdmin,
-  editUserByUser,
-  deleteUserByUser,
-  searchUser,
-  getUsersByAuth,
+   getUsers,
+   getUserById,
+   editUserByAdmin,
+   deleteUserByAdmin,
+   editUserByUser,
+   deleteUserByUser,
+   searchUser,
+   getUsersByAuth
 } = require('../controllers/users');
 
 const {
-  addCategory,
-  updateCategoryById,
-  deleteCategoryById,
-  getCategory,
-  getCategoryById,
+   addCategory,
+   updateCategoryById,
+   deleteCategoryById,
+   getCategory,
+   getCategoryById
 } = require('../controllers/category');
 
 const { getRoles, getRoleById } = require('../controllers/roles');
 const { checkDuplicateEmail, register } = require('../controllers/register');
 const { login } = require('../controllers/login');
 const {
-  createComment,
-  deleteComment,
-  editCommentByUser,
+   createComment,
+   deleteComment,
+   editCommentByUser
 } = require('../controllers/comment');
 const {
-  verifyToken,
-  isAuthor,
-  isAdmin,
+   verifyToken,
+   isAuthor,
+   isAdmin
 } = require('../middleware/verifyJwtToken');
 const { viewForAdmin, viewAuthor } = require('../controllers/view');
 const { createSEO, deleteSEO } = require('../controllers/seo');
@@ -51,15 +51,15 @@ const { createSEO, deleteSEO } = require('../controllers/seo');
 const router = express.Router();
 
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    // Specify the destination directory where files will be stored
-    cb(null, './assets');
-  },
-  filename: (req, file, cb) => {
-    // Customize the filename (optional)
-    // In this example, we keep the original filename
-    cb(null, file.originalname);
-  },
+   destination: (req, file, cb) => {
+      // Specify the destination directory where files will be stored
+      cb(null, './assets');
+   },
+   filename: (req, file, cb) => {
+      // Customize the filename (optional)
+      // In this example, we keep the original filename
+      cb(null, file.originalname);
+   }
 });
 
 const upload = multer({ storage });

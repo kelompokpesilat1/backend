@@ -50,12 +50,11 @@ const getUserById = (req, res) => {
                   status: 'success',
                   message: 'berhasil menampilkan data',
                   user: {
-                     user: {
-                        name: user.name,
-                        email: user.email,
-                        foto: user.foto,
-                        article: data
-                     }
+                     name: user.name,
+                     email: user.email,
+                     foto: user.foto,
+                     id_roles: user.id_roles,
+                     article: data
                   }
                });
             })
@@ -112,15 +111,20 @@ const getUserByRoles = (req, res) => {
 
 const editUserByAdmin = (req, res) => {
    const { id } = req.params;
-   const { name, email, password, foto, id_roles } = req.body;
+   const { id_roles } = req.body;
+
+   if (id_roles < 1 || id_roles > 3) {
+      res.status(403).send({
+         status: 'failed',
+         message: 'Id roles tidak valid'
+      });
+      return;
+   }
+
    User.findByPk(id)
       .then((user) => {
          user
             .update({
-               name,
-               email,
-               password,
-               foto,
                id_roles
             })
             .then((data) => {
