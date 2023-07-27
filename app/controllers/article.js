@@ -13,7 +13,7 @@ const addArticles = async (req, res) => {
   const category = await Category.findOne({
     where: { category: categoryName },
   });
-  console.log(category);
+  console.log(addArticles);
   const {
     title, cover, important, content,
   } = req.body;
