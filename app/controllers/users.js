@@ -154,10 +154,10 @@ const editUserByAdmin = (req, res) => {
 };
 
 const deleteUserByAdmin = (req, res) => {
-   const { userId } = req.body;
+   const { id } = req.params;
    User.destroy({
       where: {
-         id: userId
+         id: id
       }
    })
       .then((data) => {

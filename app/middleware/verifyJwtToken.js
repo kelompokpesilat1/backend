@@ -83,8 +83,27 @@ const isAuthor = (req, res, next) => {
    });
 };
 
+const isAuthorOrAdmin = (req, res, next) => {
+   User.findOne({
+      where: {
+         id: req.userId
+      }
+   }).then((user) => {
+      if (user.id_roles !== 3) {
+         next();
+         return;
+      }
+      res.status(403).send({
+         auth: false,
+         message: 'Error',
+         message: 'Require author or Admin Role'
+      });
+   });
+};
+
 module.exports = {
    verifyToken,
    isAuthor,
-   isAdmin
+   isAdmin,
+   isAuthorOrAdmin
 };
