@@ -32,7 +32,7 @@ const register = (req, res) => {
   const roles = 3;
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+  const passwordRegex = /^[a-zA-Z0-9_]+$/;
 
   if (!passwordRegex.test(req.body.password)) {
     res.status(401).send({
