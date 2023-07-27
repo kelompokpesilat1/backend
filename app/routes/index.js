@@ -58,7 +58,7 @@ router.get('/articles/:id', viewersIncrement, getArticlesById);
 router.get('/articles/search/:q', searchArticle);
 router.post('/addArticle', upload.single('cover'), verifyToken, isAuthor, addArticles);
 router.delete('/articles/delete/:id', verifyToken, isAuthor, deleteArticlesById);
-router.put('/articles/update/:id', verifyToken, isAuthor, putArticlesById );
+router.put('/articles/update/:id', verifyToken, isAuthor, putArticlesById);
 
 // * route user
 router.get('/users', getUsers);

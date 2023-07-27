@@ -51,9 +51,9 @@ const getArticles = (req, res) => {
     });
 };
 
-const getArticlesId = async (req, res) => {
+const getArticlesById = async (req, res) => {
   try {
-    const article = await Article.findByPk(req.params.id, { include: Comments });
+    const article = await Article.findByPk(req.params.id);
     const category = await Category.findOne({ where: { id: article.id_category } });
     const comment = await Comments.findAll({ where: { id_article: article.id }, include: User });
 
@@ -67,8 +67,11 @@ const getArticlesId = async (req, res) => {
       status: 'success',
       message: 'berhasil menampilkan data',
       data: {
-        category: category.category,
-        data: article,
+        category: category.name,
+        data: {
+          article,
+          comment: comment,
+        },
       },
     });
   } catch (error) {
