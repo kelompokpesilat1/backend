@@ -22,7 +22,7 @@ const addArticles = async (req, res) => {
     id_category: category.id,
     title,
     author: userId,
-    cover: req.file.path
+    cover: req.file.path,
     important,
     content,
   })
@@ -53,7 +53,7 @@ const getArticles = (req, res) => {
 
 const getArticlesId = async (req, res) => {
   try {
-    const article = await Article.findByPk(req.params.id, { include: Comments });
+    const article = await Article.findByPk(req.params.id, { include: Comments.commentar });
     const category = await Category.findOne({ where: { id: article.id_category } });
     const comment = await Comments.findAll({ where: { id_article: article.id }, include: User });
 
