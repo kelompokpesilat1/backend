@@ -25,10 +25,9 @@ try {
 }
 
 app.use(cors());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({
-  extended: true,
-}));
+app.use('/assets', express.static('assets'));
 app.use(router);
 
 app.listen(port, () => {

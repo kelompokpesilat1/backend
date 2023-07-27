@@ -8,7 +8,7 @@ const jwt = require('jsonwebtoken');
 const { User } = require('../models');
 
 const verifyToken = (req, res, next) => {
-  const tokenHeader = req.headers['x-access-token'];
+  const tokenHeader = req.headers.authorization;
   if (!tokenHeader) {
     return res.status(500).send({
       auth: false,

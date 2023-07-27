@@ -47,7 +47,7 @@ const getCategoryById = (req, res) => {
         res.status(200).send({
           status: 'success',
           message: 'berhasil menampilkan data',
-          category: {
+          data: {
             kategory: category.category,
             article: data,
           },
@@ -125,9 +125,6 @@ const deleteCategoryById = async (req, res) => {
     });
   }
 };
-
-
-
 module.exports = {
   addCategory, getCategory, getCategoryById, updateCategoryById, deleteCategoryById,
 };

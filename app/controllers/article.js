@@ -1,43 +1,48 @@
-/* eslint-disable no-param-reassign */
-const { Op } = require('sequelize');
-const { Article } = require('../models');
-const { Comments } = require('../models');
+const { Op } = require("sequelize");
+const { Article } = require("../models");
+const { Comment } = require("../models");
+const { Category } = require("../models");
 
-const addArticles = (req, res) => {
-  const { userId } = req;
-  const { category } = req.body;
-  const {
-    title, author, cover, important, content,
-  } = req.body;
-  Article.create({
-    id_user: userId,
-    id_category: category,
-    title,
-    author,
-    cover,
-    important,
-    content,
-  })
-    .then((data) => {
-      res.send({
-        status: 'success',
-        message: 'berhasil menampilkan data',
-        data,
-      });
-    }).catch((err) => {
-      res.status(400).send(err.message);
-    });
-};
-const getArticles = (req, res) => {
-  Article.findAll().then((data) => {
-    res.send({
-      status: 'success',
-      message: 'berhasil menampilkan data',
-      data,
-    });
-  }).catch((err) => {
-    res.status(400).send(err.message);
+const addArticles = async (req, res) => {
+  const categoryName = req.body.category;
+  console.log(req.body.category);
+  const userId = req.userId;
+  const category = await Category.findOne({
+    where: { category: categoryName },
   });
+  console.log(category);
+  const { title, important, content, viewers } = req.body;
+    Article.create({
+      id_user: userId,
+      id_category: category.id,
+      title,
+      author: userId,
+      cover: req.file.path,
+      viewers,
+      important,
+      content,
+    })
+      .then((data) => {
+        res.send({
+          status: 'success',
+          message: 'berhasil menampilkan data',
+          data,
+        });
+      })
+    }
+
+const getArticles = (req, res) => {
+   Article.findAll()
+      .then((data) => {
+         res.send({
+            status: 'success',
+            message: 'berhasil menampilkan data',
+            data
+         });
+      })
+      .catch((err) => {
+         res.status(400).send(err.message);
+      });
 };
 
 const getArticlesById = (req, res) => {
@@ -57,7 +62,6 @@ const getArticlesById = (req, res) => {
             author: article.author,
             cover: article.cover,
             viewers: article.viewers,
-            content: article.content,
             comments: data,
           },
         });
@@ -67,15 +71,10 @@ const getArticlesById = (req, res) => {
           errors: err.message,
         });
       });
-    }).catch((err) => {
-      res.status(500).send({
-        message: 'Error',
-        errors: err.message,
-      });
-    });
-};
+});
+}
 
-const putArticles = (req, res) => {
+const putArticlesById = (req, res) => {
   const ArticleId = req.params.id;
 
   Article.findByPk(ArticleId)
@@ -111,7 +110,7 @@ const putArticles = (req, res) => {
     });
 };
 
-  const deleteArticles = (req, res) => {
+  const deleteArticlesById = (req, res) => {
     const ArticleId = req.params.id;
     const { role } = req.userId;
   
@@ -147,51 +146,56 @@ const putArticles = (req, res) => {
   };  
   
 const searchArticle = (req, res) => {
-  const searchQuery = req.params.id;
-  Article.findAll({
-    where: {
-      title: {
-        [Op.like]: `%${searchQuery}%`,
-      },
-    },
-  }).then((data) => {
-    res.send({
-      status: 'success',
-      message: 'berhasil menampilkan data',
-      data,
-    });
-  }).catch((err) => {
-    res.status(400).send(err.message);
-  });
+   const searchQuery = req.params.id;
+   Article.findAll({
+      where: {
+         title: {
+            [Op.like]: `%${searchQuery}%`
+         }
+      }
+   })
+      .then((data) => {
+         res.send({
+            status: 'success',
+            message: 'berhasil menampilkan data',
+            data
+         });
+      })
+      .catch((err) => {
+         res.status(400).send(err.message);
+      });
 };
 
 const viewersIncrement = (req, res, next) => {
-  const { id } = req.params;
-  Article.findByPk(id)
-    .then((data) => {
-      data.increment({
-        viewers: 1,
-      }).catch((err) => {
-        res.status(500).send({
-          message: 'Error',
-          errors: err.message,
-        });
+   const { id } = req.params;
+   Article.findByPk(id)
+      .then((data) => {
+         data
+            .increment({
+               viewers: 1
+            })
+            .catch((err) => {
+               res.status(500).send({
+                  message: 'Error',
+                  errors: err.message
+               });
+            });
+      })
+      .catch((err) => {
+         res.status(500).send({
+            message: 'Error',
+            errors: err.message
+         });
       });
-    }).catch((err) => {
-      res.status(500).send({
-        message: 'Error',
-        errors: err.message,
-      });
-    });
-  next();
+   next();
 };
 
 module.exports = {
   addArticles,
   getArticles,
   getArticlesById,
-  putArticles,
+  putArticlesById,
   searchArticle,
-  deleteArticles,
+  deleteArticlesById,
   viewersIncrement,
 };
