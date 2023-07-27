@@ -1,6 +1,7 @@
 /* eslint-disable consistent-return */
 const { Category } = require('../models');
 const { Article } = require('../models');
+const { User } = require('../models');
 
 // add category
 const addCategory = async (req, res) => {
@@ -22,47 +23,40 @@ const addCategory = async (req, res) => {
     });
   }
 };
-
-const getCategory = (req, res) => {
-  Category.findAll().then((data) => {
+const getCategory = async (req, res) => {
+  try {
+    const category = await Category.findAll();
     res.send({
       status: 'success',
       message: 'berhasil menampilkan data',
-      data,
+      category,
     });
-  }).catch((err) => {
-    res.status(400).send(err.message);
-  });
+  } catch (error) {
+    res.status(500).send({
+      message: 'Terjadi kesalahan saat menampilkan',
+      error: error.message,
+    });
+  }
 };
 
-const getCategoryById = (req, res) => {
-  Category.findByPk(req.params.id)
-    .then((category) => {
-      Article.findAll({
-        where: {
-          id_category: category.id,
-        },
-      }).then((data) => {
-        res.status(200).send({
-          status: 'success',
-          message: 'berhasil menampilkan data',
-          data: {
-            kategory: category.category,
-            article: data,
-          },
-        });
-      }).catch((err) => {
-        res.status(500).send({
-          message: 'Error',
-          errors: err.message,
-        });
-      });
-    }).catch((err) => {
-      res.status(500).send({
-        message: 'Error',
-        errors: err.message,
-      });
+const getCategoryById = async (req, res) => {
+  try {
+    const category = await Category.findByPk(req.params.id);
+    const article = await Article.findAll({ where: { id_category: category.id }, include: User });
+    res.status(200).send({
+      status: 'success',
+      message: 'berhasil menampilkan data',
+      data: {
+        kategory: category.category,
+        article,
+      },
     });
+  } catch (error) {
+    res.status(500).send({
+      message: 'Terjadi kesalahan saat menampilkan',
+      error: error.message,
+    });
+  }
 };
 
 const updateCategoryById = (req, res) => {
