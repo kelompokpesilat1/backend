@@ -38,42 +38,41 @@ const getUsersByAuth = (req, res) => {
 };
 
 const getUserById = (req, res) => {
-  User.findByPk(req.params.id, { include: Roles })
-    .then((user) => {
+   User.findByPk(req.params.id, { include: Roles }).then((user) => {
       if (!user) {
-        return res.send({
-          status: 'failed',
-          message: 'maaf user yang anda cari tidak ada',
-        });
+         return res.send({
+            status: 'failed',
+            message: 'maaf user yang anda cari tidak ada'
+         });
       }
       Article.findAll({
-        where: {
-          id_user: user.id,
-        },
+         where: {
+            id_user: user.id
+         }
       })
-        .then((data) => {
-          res.status(200).send({
-            status: 'success',
-            message: 'berhasil menampilkan data',
-            data: {
-              user: {
-                roles: user.Role.name,
-                name: user.name,
-                email: user.email,
-                foto: user.foto,
-                article: data,
-              },
-            },
-          });
-        })
-        .catch((err) => {
-          res.status(500).send({
-            message: 'Error',
-            errors: err.message
+         .then((data) => {
+            res.status(200).send({
+               status: 'success',
+               message: 'berhasil menampilkan data',
+               data: {
+                  user: {
+                     roles: user.Role.name,
+                     name: user.name,
+                     email: user.email,
+                     foto: user.foto,
+                     article: data
+                  }
+               }
+            });
+         })
+         .catch((err) => {
+            res.status(500).send({
+               message: 'Error',
+               errors: err.message
+            });
          });
-      });
-})
-}
+   });
+};
 
 const getUserByRoles = (req, res) => {
    Roles.findByPk(req.params.id)
@@ -153,46 +152,6 @@ const editUserByAdmin = (req, res) => {
       });
    return;
 };
-
-if (email) {
-   if (!emailRegex.test(email)) {
-      res.status(401).send({
-         status: 'failed',
-         message: 'maaf email tidak valid'
-      });
-      return;
-   }
-}
-User.findByPk(id)
-   .then((user) => {
-      user
-         .update({
-            name,
-            email,
-            password,
-            foto: req.file.path,
-            id_roles
-         })
-         .then((data) => {
-            res.status(200).send({
-               status: 'success',
-               message: 'berhasil mengupdate data',
-               data
-            });
-         })
-         .catch((err) => {
-            res.status(500).send({
-               message: 'gagal mengupdate data',
-               errors: err.message
-            });
-         });
-   })
-   .catch((err) => {
-      res.status(500).send({
-         message: 'user tidak ditemukan',
-         errors: err.message
-      });
-   });
 
 const deleteUserByAdmin = (req, res) => {
    const { userId } = req.body;
