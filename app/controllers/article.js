@@ -13,10 +13,11 @@ const addArticles = async (req, res) => {
    const category = await Category.findOne({
       where: { name: categoryName }
    });
+   console.log(category);
    const { title, important, content, name } = req.body;
    Article.create({
       id_user: userId,
-      id_category: category,
+      id_category: category.id,
       title,
       author: name,
       cover: req.file.path,
