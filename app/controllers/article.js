@@ -173,28 +173,28 @@ const searchArticle = (req, res) => {
       });
 };
 
-const viewersIncrement = (req, res, next) => {
-   const { id } = req.params;
-   Article.findByPk(id)
-      .then((data) => {
-         data
-            .increment({
-               viewers: 1
-            })
-            .catch((err) => {
-               res.status(500).send({
-                  message: 'Error',
-                  errors: err.message
-               });
-            });
-      })
-      .catch((err) => {
-         res.status(500).send({
-            message: 'Error',
-            errors: err.message
+const viewersIncrement = async (req, res, next) => {
+   try {
+      const { id } = req.params
+      const article = await Article.findByPk(id)
+      if (!article) {
+         return res.status(500).send({
+            status: 'fail',
+            message: 'article tidak ditemukan',
          });
-      });
-   next();
+      }
+      console.log(article);
+      article.increment({
+         viewers: 1
+      })
+      next()
+   } catch (error) {
+      res.status(500).send({
+         status: 'error',
+         message: 'Terjadi kesalahan',
+         errors: err.message
+   });
+   }
 };
 
 module.exports = {
