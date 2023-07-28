@@ -8,21 +8,23 @@ const { User } = require('../models');
 const { Category } = require('../models');
 
 const addArticles = async (req, res) => {
+  console.log(req.body)
    const categoryName = req.body.name;
    const { userId } = req;
    const category = await Category.findOne({
       where: { name: categoryName }
    });
    console.log(category);
-   const { title, important, content, name } = req.body;
+   const { title, important, content, author, viewers, cover } = req.body;
    Article.create({
       id_user: userId,
-      id_category: category.id,
+      id_category: 1,
       title,
-      author: name,
-      cover: req.file.path,
+      author,
+      cover,
       important,
-      content
+      content,
+      viewers
    })
       .then((data) => {
          res.send({
