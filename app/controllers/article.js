@@ -22,7 +22,8 @@ const addArticles = async (req, res) => {
       author: name,
       cover: req.file.path,
       important,
-      content
+      content,
+      viewers: 1
    })
       .then((data) => {
          res.send({
