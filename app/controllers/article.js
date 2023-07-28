@@ -8,8 +8,7 @@ const { User } = require('../models');
 const { Category } = require('../models');
 
 const addArticles = async (req, res) => {
-  console.log(req.body)
-   const categoryName = req.body.name;
+   const categoryName = req.body.category;
    const { userId } = req;
    const category = await Category.findOne({
       where: { name: categoryName }
