@@ -21,7 +21,7 @@ const addArticles = async (req, res) => {
       id_category: 1,
       title,
       author,
-      cover,
+      cover: req.file.path,
       important,
       content,
       viewers
