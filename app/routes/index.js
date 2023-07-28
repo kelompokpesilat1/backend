@@ -48,6 +48,7 @@ const { createSEO, updateSEO, getSEO } = require('../controllers/seo');
 
 const router = express.Router();
 const multer = require('multer');
+const { getViewersPerMonth } = require('../controllers/analytic');
 
 const storage = multer.diskStorage({
    destination: (req, file, cb) => {
@@ -77,13 +78,6 @@ router.post(
 router.get('/articles', getArticles);
 router.get('/articles/:id', viewersIncrement, getArticlesById);
 router.get('/articles/search/:q', searchArticle);
-router.post(
-   '/addArticle',
-   upload.single('cover'),
-   verifyToken,
-   isAuthorOrAdmin,
-   addArticles
-);
 router.delete(
    '/articles/delete/:id',
    verifyToken,
@@ -92,6 +86,7 @@ router.delete(
 );
 router.put(
    '/articles/update/:id',
+   upload.single('cover'),
    verifyToken,
    isAuthorOrAdmin,
    putArticlesById
@@ -135,12 +130,8 @@ router.get('/admin/view', verifyToken, isAdmin, viewForAdmin);
 // * route buat SEO
 router.post('/addseo', verifyToken, isAuthor, upload.single('logo'), createSEO);
 router.get('/seo', getSEO, verifyToken, isAuthor);
-router.put(
-   '/updateseo/:id',
-   verifyToken,
-   upload.single('logo'),
-   isAuthor,
-   updateSEO
-);
+router.put('/updateseo/:id', verifyToken, upload.single('logo'), isAuthor, updateSEO);
+
+router.get('/view', getViewersPerMonth)
 
 module.exports = router;
