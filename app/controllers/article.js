@@ -36,6 +36,7 @@ const addArticles = async (req, res) => {
          res.status(400).send(err.message);
       });
 };
+
 const getArticles = (req, res) => {
    Article.findAll()
       .then((data) => {
