@@ -3,16 +3,15 @@ const { Category } = require('../models');
 const { Article } = require('../models');
 const { User } = require('../models');
 
-// add category
 const addCategory = async (req, res) => {
   try {
-    const { category } = req.body;
-    const newCategory = await Category.create({ category });
+    const { name } = req.body;
+    const newCategory = await Category.create({ name }); 
 
     res.status(200).json({
       status: 'success',
       data: {
-        categoryId: newCategory.id,
+        name: newCategory.name,
       },
     });
   } catch (err) {
@@ -23,6 +22,7 @@ const addCategory = async (req, res) => {
     });
   }
 };
+
 const getCategory = async (req, res) => {
   try {
     const category = await Category.findAll();
@@ -61,7 +61,7 @@ const getCategoryById = async (req, res) => {
 
 const updateCategoryById = (req, res) => {
   const categoryId = req.params.id;
-  const { category } = req.body;
+  const { name } = req.body;
 
   Category.findByPk(categoryId)
     .then((foundCategory) => {
@@ -71,12 +71,12 @@ const updateCategoryById = (req, res) => {
         });
       }
 
-      foundCategory.update({ category })
+      foundCategory.update({ name })
         .then((updatedCategory) => {
           res.status(200).send({
             status: 'success',
             message: 'Kategori berhasil diupdate',
-            category: updatedCategory,
+            name: updatedCategory,
           });
         })
         .catch((err) => {
@@ -98,14 +98,14 @@ const deleteCategoryById = async (req, res) => {
   try {
     const categoryId = req.params.id;
 
-    const category = await Category.findByPk(categoryId);
-    if (!category) {
+    const name = await Category.findByPk(categoryId);
+    if (!name) {
       return res.status(404).send({
         message: 'Kategori tidak ditemukan',
       });
     }
 
-    await category.destroy();
+    await name.destroy();
 
     res.status(200).send({
       status: 'success',

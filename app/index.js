@@ -8,7 +8,7 @@ const bodyParser = require('body-parser');
 
 // inisiate sequelize
 const { sequelize } = require('./models');
-const router = require('./routes');
+const router = require('./routes'); 
 
 // inisiate tambahan
 require('dotenv').config();
