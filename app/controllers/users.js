@@ -10,7 +10,7 @@ const { Roles } = require('../models');
 const { Article } = require('../models');
 
 const getUsers = (req, res) => {
-   User.findAll()
+   User.findAll({ include: Roles })
       .then((data) => {
          res.send({
             status: 'success',
