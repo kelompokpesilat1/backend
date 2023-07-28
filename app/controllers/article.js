@@ -13,7 +13,6 @@ const addArticles = async (req, res) => {
    const category = await Category.findOne({
       where: { name: categoryName }
    });
-   console.log(category);
    const { title, important, content, name } = req.body;
    Article.create({
       id_user: userId,
@@ -38,12 +37,12 @@ const addArticles = async (req, res) => {
 };
 
 const getArticles = (req, res) => {
-   Article.findAll()
+   Article.findAll({ include: Category })
       .then((data) => {
          res.send({
             status: 'success',
             message: 'berhasil menampilkan data',
-            data
+            data,
          });
       })
       .catch((err) => {
@@ -122,8 +121,6 @@ const putArticlesById = (req, res) => {
 
 const deleteArticlesById = (req, res) => {
    const ArticleId = req.params.id;
-   const { role } = req.userId;
-
    Article.findByPk(ArticleId)
       .then((Article) => {
          if (!Article) {
