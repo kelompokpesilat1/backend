@@ -5,7 +5,6 @@ const createSEO = async (req, res) => {
     const {
       title, desc, keywords,
     } = req.body;
-    const { id } = req.params;
 
     const seoData = await SEO.create({
       title,
@@ -76,7 +75,5 @@ const updateSEO = async (req, res) => {
     res.status(400).send(err.message);
   }
 };
-
-
 
 module.exports = { updateSEO, getSEO, createSEO };
