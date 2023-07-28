@@ -8,18 +8,18 @@ const { User } = require('../models');
 const { Category } = require('../models');
 
 const addArticles = async (req, res) => {
-  const categoryName = req.body.category;
+  const categoryName = req.body.name;
   const { userId } = req;
-  const category = await Category.findOne({
-    where: { category: categoryName },
+  const name = await Category.findOne({
+    where: { name: categoryName }, // Ganti "category" menjadi "name"
   });
-  console.log(category);
+  console.log(name);
   const {
     title, important, content,
   } = req.body;
   Article.create({
     id_user: userId,
-    id_category: category.id,
+    id_category: name.id, // Ganti "name: category.id" menjadi "id_category: category.id"
     title,
     author: userId,
     cover: req.file.path,
@@ -37,6 +37,7 @@ const addArticles = async (req, res) => {
       res.status(400).send(err.message);
     });
 };
+
 const getArticles = (req, res) => {
   Article.findAll()
     .then((data) => {
@@ -68,10 +69,8 @@ const getArticlesById = async (req, res) => {
       message: 'berhasil menampilkan data',
       data: {
         category: category.name,
-        data: {
           article,
           comment: comment,
-        },
       },
     });
   } catch (error) {
