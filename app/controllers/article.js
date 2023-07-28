@@ -106,12 +106,12 @@ const putArticlesById = async (req, res) => {
          cover: req.file.path,
          content,
          important,
-         category: category.id
+         id_category: nameCategory.id
       })
       res.status(200).send({
          status: 'success',
          message: 'berhasil menampilkan data',
-         category: category.name,
+         category: nameCategory.name,
          article
       });
       
