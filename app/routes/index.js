@@ -87,10 +87,15 @@ router.post(
 router.delete(
    '/articles/delete/:id',
    verifyToken,
-   isAuthor,
+   isAuthorOrAdmin,
    deleteArticlesById
 );
-router.put('/articles/update/:id', verifyToken, isAuthor, putArticlesById);
+router.put(
+   '/articles/update/:id',
+   verifyToken,
+   isAuthorOrAdmin,
+   putArticlesById
+);
 
 // * route user
 router.get('/users', getUsers);
