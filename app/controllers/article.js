@@ -14,12 +14,12 @@ const addArticles = async (req, res) => {
       where: { name: categoryName }
    });
    console.log(category);
-   const { title, important, content, author, viewers, cover } = req.body;
+   const { title, important, content, author, viewers, cover, name } = req.body;
    Article.create({
       id_user: userId,
-      id_category: 1,
+      id_category: category,
       title,
-      author,
+      author:name,
       cover: req.file.path,
       important,
       content,
