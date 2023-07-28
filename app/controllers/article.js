@@ -13,7 +13,6 @@ const addArticles = async (req, res) => {
    const category = await Category.findOne({
       where: { name: categoryName }
    });
-   console.log(category);
    const { title, important, content, name } = req.body;
    Article.create({
       id_user: userId,
@@ -83,42 +82,47 @@ const getArticlesById = async (req, res) => {
    }
 };
 
-const putArticlesById = (req, res) => {
-   const ArticleId = req.params.id;
-
-   Article.findByPk(ArticleId)
-      .then((article) => {
-         if (!article) {
-            return res.status(404).send({
-               status: 'error',
-               message: 'Article tidak ditemukan'
-            });
-         }
-         article
-            .update(req.body)
-            .then((updatedArticle) => {
-               res.status(200).send({
-                  status: 'success',
-                  message: 'Article berhasil diperbarui',
-                  data: updatedArticle
-               });
-            })
-            .catch((err) => {
-               res.status(500).send({
-                  status: 'error',
-                  message: 'Terjadi kesalahan saat memperbarui artikel',
-                  errors: err.message
-               });
-            });
+const putArticlesById = async (req, res) => {
+   try {
+      const { content, title, important, category } = req.body
+      const article = await Article.findByPk(req.params.id)
+      if (!article) {
+         return res.status(404).send({
+            status: 'error',
+            message: 'Article tidak ditemukan'
+         });
+      }
+      const nameCategory = await Category.findOne({
+         where: { name: category }
+      });
+      if(!nameCategory) {
+         return res.status(404).send({
+            status: 'error',
+            message: 'category tidak ditemukan'
+         });
+      }
+      article.update({
+         title,
+         cover: req.file.path,
+         content,
+         important,
+         category: category.id
       })
-      .catch((err) => {
+      res.status(200).send({
+         status: 'success',
+         message: 'berhasil menampilkan data',
+         category: category.name,
+         article
+      });
+      
+   } catch (error) {
          res.status(500).send({
             status: 'error',
             message: 'Terjadi kesalahan',
-            errors: err.message
+            errors: error.message
          });
-      });
-};
+   }
+}
 
 const deleteArticlesById = (req, res) => {
    const ArticleId = req.params.id;

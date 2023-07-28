@@ -86,6 +86,7 @@ router.delete(
 );
 router.put(
    '/articles/update/:id',
+   upload.single('cover'),
    verifyToken,
    isAuthorOrAdmin,
    putArticlesById
