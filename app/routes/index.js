@@ -72,7 +72,7 @@ router.post(
    '/articles',
    upload.single('cover'),
    verifyToken,
-   isAuthor,
+   isAuthorOrAdmin,
    addArticles
 );
 router.get('/articles', getArticles);
@@ -130,8 +130,14 @@ router.get('/admin/view', verifyToken, isAdmin, viewForAdmin);
 // * route buat SEO
 router.post('/addseo', verifyToken, isAuthor, upload.single('logo'), createSEO);
 router.get('/seo', getSEO, verifyToken, isAuthor);
-router.put('/updateseo/:id', verifyToken, upload.single('logo'), isAuthor, updateSEO);
+router.put(
+   '/updateseo/:id',
+   verifyToken,
+   upload.single('logo'),
+   isAuthor,
+   updateSEO
+);
 
-router.get('/view', getViewersPerMonth)
+router.get('/view', getViewersPerMonth);
 
 module.exports = router;

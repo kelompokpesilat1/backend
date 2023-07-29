@@ -42,7 +42,7 @@ const getArticles = (req, res) => {
          res.send({
             status: 'success',
             message: 'berhasil menampilkan data',
-            data,
+            data
          });
       })
       .catch((err) => {
@@ -84,8 +84,8 @@ const getArticlesById = async (req, res) => {
 
 const putArticlesById = async (req, res) => {
    try {
-      const { content, title, important, category } = req.body
-      const article = await Article.findByPk(req.params.id)
+      const { content, title, important, category } = req.body;
+      const article = await Article.findByPk(req.params.id);
       if (!article) {
          return res.status(404).send({
             status: 'error',
@@ -95,7 +95,7 @@ const putArticlesById = async (req, res) => {
       const nameCategory = await Category.findOne({
          where: { name: category }
       });
-      if(!nameCategory) {
+      if (!nameCategory) {
          return res.status(404).send({
             status: 'error',
             message: 'category tidak ditemukan'
@@ -107,22 +107,21 @@ const putArticlesById = async (req, res) => {
          content,
          important,
          id_category: nameCategory.id
-      })
+      });
       res.status(200).send({
          status: 'success',
          message: 'berhasil menampilkan data',
          category: nameCategory.name,
          article
       });
-      
    } catch (error) {
-         res.status(500).send({
-            status: 'error',
-            message: 'Terjadi kesalahan',
-            errors: error.message
-         });
+      res.status(500).send({
+         status: 'error',
+         message: 'Terjadi kesalahan',
+         errors: error.message
+      });
    }
-}
+};
 
 const deleteArticlesById = (req, res) => {
    const ArticleId = req.params.id;
@@ -180,25 +179,25 @@ const searchArticle = (req, res) => {
 
 const viewersIncrement = async (req, res, next) => {
    try {
-      const { id } = req.params
-      const article = await Article.findByPk(id)
+      const { id } = req.params;
+      const article = await Article.findByPk(id);
       if (!article) {
          return res.status(500).send({
             status: 'fail',
-            message: 'article tidak ditemukan',
+            message: 'article tidak ditemukan'
          });
       }
       console.log(article);
       article.increment({
          viewers: 1
-      })
-      next()
+      });
+      next();
    } catch (error) {
       res.status(500).send({
          status: 'error',
          message: 'Terjadi kesalahan',
          errors: err.message
-   });
+      });
    }
 };
 
