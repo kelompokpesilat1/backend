@@ -82,43 +82,88 @@ const getArticlesById = async (req, res) => {
    }
 };
 
+// const putArticlesById = async (req, res) => {
+//    try {
+//       const { content, title, important, category } = req.body;
+//       const article = await Article.findByPk(req.params.id);
+//       if (!article) {
+//          return res.status(404).send({
+//             status: 'error',
+//             message: 'Article tidak ditemukan'
+//          });
+//       }
+//       const nameCategory = await Category.findOne({
+//          where: { name: category }
+//       });
+//       if (!nameCategory) {
+//          return res.status(404).send({
+//             status: 'error',
+//             message: 'category tidak ditemukan'
+//          });
+//       }
+//       article.update({
+//          title,
+//          cover: req.file.path,
+//          content,
+//          important,
+//          id_category: nameCategory.id
+//       });
+//       res.status(200).send({
+//          status: 'success',
+//          message: 'berhasil menampilkan data',
+//          category: nameCategory.name,
+//          article
+//       });
+//    } catch (error) {
+//       res.status(500).send({
+//          status: 'error',
+//          message: 'Terjadi kesalahan',
+//          errors: error.message
+//       });
+//    }
+// };
+
 const putArticlesById = async (req, res) => {
+   const { id } = req.params;
+   const categoryName = req.body.category;
+   const { userId } = req;
+
    try {
-      const { content, title, important, category } = req.body;
-      const article = await Article.findByPk(req.params.id);
+      // Cari artikel berdasarkan ID
+      const article = await Article.findByPk(id);
+
+      // Jika artikel tidak ditemukan
       if (!article) {
          return res.status(404).send({
-            status: 'error',
-            message: 'Article tidak ditemukan'
+            status: 'fail',
+            message: 'Artikel tidak ditemukan'
          });
       }
-      const nameCategory = await Category.findOne({
-         where: { name: category }
+
+      // Cari kategori berdasarkan nama
+      const category = await Category.findOne({
+         where: { name: categoryName }
       });
-      if (!nameCategory) {
-         return res.status(404).send({
-            status: 'error',
-            message: 'category tidak ditemukan'
-         });
-      }
-      article.update({
-         title,
-         cover: req.file.path,
-         content,
-         important,
-         id_category: nameCategory.id
+
+      // Update data artikel
+      await article.update({
+         id_category: category.id,
+         title: req.body.title,
+         important: req.body.important,
+         content: req.body.content
+         // Jika Anda ingin mengupdate cover juga, Anda dapat menambahkan properti cover dengan req.file.path
       });
-      res.status(200).send({
+
+      return res.status(200).send({
          status: 'success',
-         message: 'berhasil menampilkan data',
-         category: nameCategory.name,
-         article
+         message: 'Berhasil mengupdate artikel',
+         data: article
       });
    } catch (error) {
-      res.status(500).send({
+      return res.status(500).send({
          status: 'error',
-         message: 'Terjadi kesalahan',
-         errors: error.message
+         message: 'Terjadi kesalahan saat mengupdate artikel',
+         error: error.message
       });
    }
 };
