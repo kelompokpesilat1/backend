@@ -128,13 +128,12 @@ router.get('/author/view', verifyToken, isAuthor, viewAuthor);
 router.get('/admin/view', verifyToken, isAdmin, viewForAdmin);
 
 // * route buat SEO
-router.post('/addseo', verifyToken, isAuthor, upload.single('logo'), createSEO);
-router.get('/seo', getSEO, verifyToken, isAuthor);
+router.get('/seo', getSEO);
 router.put(
    '/updateseo/:id',
    verifyToken,
    upload.single('logo'),
-   isAuthor,
+   isAdmin,
    updateSEO
 );
 
