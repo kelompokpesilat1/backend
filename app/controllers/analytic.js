@@ -26,12 +26,25 @@ const getViewersPerMonth = async (req, res) => {
       group: [Sequelize.fn('YEAR', Sequelize.col('createdAt')), Sequelize.fn('MONTH', Sequelize.col('createdAt'))],
       raw: true,
     });
-    const resultsWithMonthNames = results.map((result) => {
+
+    const allMonthsData = [];
+      for (let month = 1; month <= 12; month++) {
+        const foundMonth = results.find((result) => parseInt(result.month) === month);
+        const monthData = {
+          year: new Date().getFullYear(),
+          month,
+          views: foundMonth ? foundMonth.views : 0,
+        };
+      allMonthsData.push(monthData);
+    }
+    
+    const resultsWithMonthNames = allMonthsData.map((result) => {
       return {
         ...result,
         month: monthNames[result.month],
       };
     });
+
     res.send({
       status: 'success',
       message: 'berhasil menampilkan data',
