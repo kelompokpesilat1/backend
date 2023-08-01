@@ -52,9 +52,8 @@ const getArticles = (req, res) => {
 
 const getArticlesTitle = async (req, res) => {
    try {
-      const { title } = req.params;
+      const { title } = req.query;
       const article = await Article.findOne({ where: { title: title } });
-      console.log(article);
 
       if (!article) {
          res.status(404).send({
@@ -90,7 +89,7 @@ const getArticlesTitle = async (req, res) => {
 };
 
 const putArticlesById = async (req, res) => {
-   const { title } = req.params;
+   const { title } = req.query;
    const categoryName = req.body.category;
    const { userId } = req;
 
@@ -186,7 +185,6 @@ const viewersIncrement = async (req, res, next) => {
             message: 'article tidak ditemukan'
          });
       }
-      console.log(article);
       article.increment({
          viewers: 1
       });
@@ -195,7 +193,7 @@ const viewersIncrement = async (req, res, next) => {
       res.status(500).send({
          status: 'error',
          message: 'Terjadi kesalahan',
-         errors: err.message
+         errors: error.message
       });
    }
 };
