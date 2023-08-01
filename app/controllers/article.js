@@ -153,36 +153,6 @@ const deleteArticlesById = async (req, res) => {
       message: 'Terjadi kesalahan saat menghapus artikel',
       errors: err.message
    });
-
-   // Article.findByPk(ArticleId)
-   //    .then((Article) => {
-   //       if (!Article) {
-   //          return res.status(404).send({
-   //             message: 'Article tidak ditemukan'
-   //          });
-   //       }
-   //       Article.destroy()
-   //          .then(() => {
-   //             res.status(200).send({
-   //                status: 'success',
-   //                message: 'Article berhasil dihapus'
-   //             });
-   //          })
-   //          .catch((err) => {
-   //             res.status(500).send({
-   //                status: 'error',
-   //                message: 'Terjadi kesalahan saat menghapus artikel',
-   //                errors: err.message
-   //             });
-   //          });
-   //    })
-   //    .catch((err) => {
-   //       res.status(500).send({
-   //          status: 'error',
-   //          message: 'Terjadi kesalahan',
-   //          errors: err.message
-   //       });
-   //    });
 };
 
 const searchArticle = (req, res) => {
