@@ -48,7 +48,7 @@ const getViewersPerMonth = async (req, res) => {
     res.send({
       status: 'success',
       message: 'berhasil menampilkan data',
-      resultsWithMonthNames
+      data: resultsWithMonthNames
     })
   } catch (error) {
     console.error('Error while fetching transaction counts:', error);
