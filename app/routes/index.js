@@ -76,7 +76,7 @@ router.post(
    addArticles
 );
 router.get('/articles', getArticles);
-router.get('/articles/detail', /*viewersIncrement*/ getArticlesTitle);
+router.get('/articles/:title', viewersIncrement, getArticlesTitle);
 router.get('/articles/search/:q', searchArticle);
 router.delete(
    '/articles/delete/:title',
@@ -85,7 +85,7 @@ router.delete(
    deleteArticlesById
 );
 router.put(
-   '/articles/update',
+   '/articles/update/:title',
    upload.single('cover'),
    verifyToken,
    isAuthorOrAdmin,

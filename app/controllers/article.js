@@ -52,7 +52,7 @@ const getArticles = (req, res) => {
 
 const getArticlesTitle = async (req, res) => {
    try {
-      const { title } = req.query;
+      const { title } = req.params;
       const article = await Article.findOne({ where: { title: title } });
 
       if (!article) {
@@ -89,7 +89,7 @@ const getArticlesTitle = async (req, res) => {
 };
 
 const putArticlesById = async (req, res) => {
-   const { title } = req.query;
+   const { title } = req.params;
    const categoryName = req.body.category;
    const { userId } = req;
 
