@@ -63,6 +63,32 @@ const getCategoryById = async (req, res) => {
    }
 };
 
+const getCategoryByName = async (req, res) => {
+   try {
+      const category = await Category.findOne({
+         where: { name: req.params.name }
+      });
+      const article = await Article.findAll({
+         where: { id_category: category.id },
+         include: User
+      });
+
+      res.status(200).send({
+         status: 'success',
+         message: 'berhasil menampilkan data',
+         data: {
+            kategory: category.name,
+            article
+         }
+      });
+   } catch (error) {
+      res.status(500).send({
+         message: 'Terjadi kesalahan saat menampilkan',
+         error: error.message
+      });
+   }
+};
+
 const updateCategoryById = (req, res) => {
    const categoryId = req.params.id;
    const { name } = req.body;
@@ -128,5 +154,6 @@ module.exports = {
    getCategory,
    getCategoryById,
    updateCategoryById,
-   deleteCategoryById
+   deleteCategoryById,
+   getCategoryByName
 };

@@ -28,7 +28,8 @@ const {
    getCategory,
    getCategoryById,
    updateCategoryById,
-   deleteCategoryById
+   deleteCategoryById,
+   getCategoryByName
 } = require('../controllers/category');
 const { getRoles, getRoleById } = require('../controllers/roles');
 const { checkDuplicateEmail, register } = require('../controllers/register');
@@ -112,7 +113,8 @@ router.delete('/user/delete/:id', verifyToken, deleteUserByUser);
 // * route category
 router.post('/category', addCategory);
 router.get('/category', getCategory);
-router.get('/category/:id', getCategoryById);
+// router.get('/category/:id', getCategoryById);
+router.get('/category/:name', getCategoryByName);
 router.put('/category/update/:id', updateCategoryById);
 router.delete('/category/delete/:id', deleteCategoryById);
 
