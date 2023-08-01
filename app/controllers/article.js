@@ -139,6 +139,13 @@ const deleteArticlesById = async (req, res) => {
 
    const article = await Article.findOne({ where: { title: articleTitle } });
 
+   if (!article) {
+      return res.status(404).send({
+         status: 'error',
+         message: 'Artikel tidak ditemukan'
+      });
+   }
+
    const deleteArticle = await article.destroy();
 
    if (deleteArticle) {
