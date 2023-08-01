@@ -52,6 +52,44 @@ const getArticles = (req, res) => {
 
 const getArticlesTitle = async (req, res) => {
    try {
+      const { title } = req.params;
+      const article = await Article.findOne({ where: { title: title } });
+
+      if (!article) {
+         res.status(404).send({
+            status: 'error',
+            message: 'article tidak ditemukan'
+         });
+      }
+      const category = await Category.findOne({
+         where: { id: article.id_category }
+      });
+
+      if (!category) {
+         return res.status(404).json({ message: 'category tidak ditemukan' });
+      }
+      const comment = await Comments.findAll({
+         where: { id_article: article.id },
+         include: User
+      });
+
+      res.status(200).send({
+         status: 'success',
+         message: 'berhasil menampilkan data',
+         category: category.name,
+         article,
+         comment
+      });
+   } catch (error) {
+      res.status(500).send({
+         message: 'Terjadi kesalahan saat menampilkan',
+         error: error.message
+      });
+   }
+};
+
+const getArticlesByQUery = async (req, res) => {
+   try {
       const { title } = req.query;
       const article = await Article.findOne({ where: { title: title } });
 
@@ -89,7 +127,7 @@ const getArticlesTitle = async (req, res) => {
 };
 
 const putArticlesById = async (req, res) => {
-   const { title } = req.query;
+   const { title } = req.params;
    const categoryName = req.body.category;
    const { userId } = req;
 
@@ -212,5 +250,6 @@ module.exports = {
    putArticlesById,
    searchArticle,
    deleteArticlesById,
-   viewersIncrement
+   viewersIncrement,
+   getArticlesByQUery
 };
