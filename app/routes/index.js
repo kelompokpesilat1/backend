@@ -10,7 +10,7 @@ const {
    putArticlesById,
    deleteArticlesById,
    searchArticle,
-   viewersIncrement,
+   viewersIncrement
 } = require('../controllers/article');
 const {
    getUsers,
@@ -79,13 +79,13 @@ router.get('/articles', getArticles);
 router.get('/articles/:title', viewersIncrement, getArticlesTitle);
 router.get('/articles/search/:q', searchArticle);
 router.delete(
-   '/articles/delete/:id',
+   '/articles/delete/:title',
    verifyToken,
    isAuthorOrAdmin,
    deleteArticlesById
 );
 router.put(
-   '/articles/update/:id',
+   '/articles/update/:title',
    upload.single('cover'),
    verifyToken,
    isAuthorOrAdmin,
@@ -119,7 +119,7 @@ router.get('/roles', getRoles);
 router.get('/role/:id', getRoleById);
 
 // * route comment
-router.post('/article/:id/comment', verifyToken, createComment);
+router.post('/article/:title/comment', verifyToken, createComment);
 router.delete('/article/comment/:id', verifyToken, deleteComment);
 router.put('/article/editcomment/:id', verifyToken, editCommentByUser);
 

@@ -1,10 +1,15 @@
-const { Comments } = require('../models');
+const { Comments, Article } = require('../models');
 
-const createComment = (req, res) => {
+const createComment = async (req, res) => {
    const { commentar } = req.body;
+
+   const article = await Article.findOne({
+      where: { title: req.params.title }
+   });
+
    Comments.create({
       id_user: req.userId,
-      id_article: req.params.id,
+      id_article: article.id,
       commentar
    })
       .then((data) => {

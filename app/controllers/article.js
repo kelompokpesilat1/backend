@@ -52,8 +52,8 @@ const getArticles = (req, res) => {
 
 const getArticlesTitle = async (req, res) => {
    try {
-      const { title } = req.params
-      const article = await Article.findOne({ where: { title: title }})
+      const { title } = req.params;
+      const article = await Article.findOne({ where: { title: title } });
       console.log(article);
 
       if (!article) {
@@ -90,13 +90,13 @@ const getArticlesTitle = async (req, res) => {
 };
 
 const putArticlesById = async (req, res) => {
-   const { id } = req.params;
+   const { title } = req.params;
    const categoryName = req.body.category;
    const { userId } = req;
 
    try {
       // Cari artikel berdasarkan ID
-      const article = await Article.findByPk(id);
+      const article = await Article.findOne({ where: { title: title } });
 
       // Jika artikel tidak ditemukan
       if (!article) {
@@ -134,37 +134,55 @@ const putArticlesById = async (req, res) => {
    }
 };
 
-const deleteArticlesById = (req, res) => {
-   const ArticleId = req.params.id;
-   Article.findByPk(ArticleId)
-      .then((Article) => {
-         if (!Article) {
-            return res.status(404).send({
-               message: 'Article tidak ditemukan'
-            });
-         }
-         Article.destroy()
-            .then(() => {
-               res.status(200).send({
-                  status: 'success',
-                  message: 'Article berhasil dihapus'
-               });
-            })
-            .catch((err) => {
-               res.status(500).send({
-                  status: 'error',
-                  message: 'Terjadi kesalahan saat menghapus artikel',
-                  errors: err.message
-               });
-            });
-      })
-      .catch((err) => {
-         res.status(500).send({
-            status: 'error',
-            message: 'Terjadi kesalahan',
-            errors: err.message
-         });
+const deleteArticlesById = async (req, res) => {
+   const articleTitle = req.params.title;
+
+   const article = await Article.findOne({ where: { title: articleTitle } });
+
+   const deleteArticle = await article.destroy();
+
+   if (deleteArticle) {
+      return res.status(200).send({
+         status: 'success',
+         message: 'Article berhasil dihapus'
       });
+   }
+
+   res.status(500).send({
+      status: 'error',
+      message: 'Terjadi kesalahan saat menghapus artikel',
+      errors: err.message
+   });
+
+   // Article.findByPk(ArticleId)
+   //    .then((Article) => {
+   //       if (!Article) {
+   //          return res.status(404).send({
+   //             message: 'Article tidak ditemukan'
+   //          });
+   //       }
+   //       Article.destroy()
+   //          .then(() => {
+   //             res.status(200).send({
+   //                status: 'success',
+   //                message: 'Article berhasil dihapus'
+   //             });
+   //          })
+   //          .catch((err) => {
+   //             res.status(500).send({
+   //                status: 'error',
+   //                message: 'Terjadi kesalahan saat menghapus artikel',
+   //                errors: err.message
+   //             });
+   //          });
+   //    })
+   //    .catch((err) => {
+   //       res.status(500).send({
+   //          status: 'error',
+   //          message: 'Terjadi kesalahan',
+   //          errors: err.message
+   //       });
+   //    });
 };
 
 const searchArticle = (req, res) => {
@@ -191,7 +209,7 @@ const searchArticle = (req, res) => {
 const viewersIncrement = async (req, res, next) => {
    try {
       const { title } = req.params;
-      const article = await Article.findOne( { where: { title: title } });
+      const article = await Article.findOne({ where: { title: title } });
       if (!article) {
          return res.status(500).send({
             status: 'fail',
@@ -219,6 +237,5 @@ module.exports = {
    putArticlesById,
    searchArticle,
    deleteArticlesById,
-   viewersIncrement,
-   getArticlesByName
+   viewersIncrement
 };
