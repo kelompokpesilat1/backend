@@ -50,23 +50,30 @@ const getArticles = (req, res) => {
       });
 };
 
-const getArticlesById = async (req, res) => {
+const getArticlesTitle = async (req, res) => {
    try {
-      const article = await Article.findByPk(req.params.id);
+      const { title } = req.params
+      const article = await Article.findOne({ where: { title: title }})
+      console.log(article);
+
+      if (!article) {
+         res.status(404).send({
+            status: 'error',
+            message: 'article tidak ditemukan'
+         });
+      }
       const category = await Category.findOne({
          where: { id: article.id_category }
       });
+
+      if (!category) {
+         return res.status(404).json({ message: 'category tidak ditemukan' });
+      }
       const comment = await Comments.findAll({
          where: { id_article: article.id },
          include: User
       });
 
-      if (!article) {
-         res.status(500).send({
-            status: 'error',
-            message: 'article tidak ditemukan'
-         });
-      }
       res.status(200).send({
          status: 'success',
          message: 'berhasil menampilkan data',
@@ -81,47 +88,6 @@ const getArticlesById = async (req, res) => {
       });
    }
 };
-
-// const putArticlesById = async (req, res) => {
-//    try {
-//       const { content, title, important, category } = req.body;
-//       const article = await Article.findByPk(req.params.id);
-//       if (!article) {
-//          return res.status(404).send({
-//             status: 'error',
-//             message: 'Article tidak ditemukan'
-//          });
-//       }
-//       const nameCategory = await Category.findOne({
-//          where: { name: category }
-//       });
-//       if (!nameCategory) {
-//          return res.status(404).send({
-//             status: 'error',
-//             message: 'category tidak ditemukan'
-//          });
-//       }
-//       article.update({
-//          title,
-//          cover: req.file.path,
-//          content,
-//          important,
-//          id_category: nameCategory.id
-//       });
-//       res.status(200).send({
-//          status: 'success',
-//          message: 'berhasil menampilkan data',
-//          category: nameCategory.name,
-//          article
-//       });
-//    } catch (error) {
-//       res.status(500).send({
-//          status: 'error',
-//          message: 'Terjadi kesalahan',
-//          errors: error.message
-//       });
-//    }
-// };
 
 const putArticlesById = async (req, res) => {
    const { id } = req.params;
@@ -224,8 +190,8 @@ const searchArticle = (req, res) => {
 
 const viewersIncrement = async (req, res, next) => {
    try {
-      const { id } = req.params;
-      const article = await Article.findByPk(id);
+      const { title } = req.params;
+      const article = await Article.findOne( { where: { title: title } });
       if (!article) {
          return res.status(500).send({
             status: 'fail',
@@ -249,7 +215,7 @@ const viewersIncrement = async (req, res, next) => {
 module.exports = {
    addArticles,
    getArticles,
-   getArticlesById,
+   getArticlesTitle,
    putArticlesById,
    searchArticle,
    deleteArticlesById,

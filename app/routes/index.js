@@ -6,11 +6,11 @@ const express = require('express');
 const {
    addArticles,
    getArticles,
-   getArticlesById,
+   getArticlesTitle,
    putArticlesById,
    deleteArticlesById,
    searchArticle,
-   viewersIncrement
+   viewersIncrement,
 } = require('../controllers/article');
 const {
    getUsers,
@@ -76,7 +76,7 @@ router.post(
    addArticles
 );
 router.get('/articles', getArticles);
-router.get('/articles/:id', viewersIncrement, getArticlesById);
+router.get('/articles/:title', viewersIncrement, getArticlesTitle);
 router.get('/articles/search/:q', searchArticle);
 router.delete(
    '/articles/delete/:id',
