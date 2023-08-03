@@ -7,6 +7,8 @@ const { Article, Category, User, Comments } = require('../models');
 const addArticles = async (req, res) => {
    const categoryName = req.body.category;
    const { userId } = req;
+   const publish = false
+   console.log(publish);
    const category = await Category.findOne({
       where: { name: categoryName }
    });
@@ -19,13 +21,14 @@ const addArticles = async (req, res) => {
       cover: req.file.path,
       important,
       content,
-      viewers: 1
+      viewers: 1,
+      publish,
    })
       .then((data) => {
          res.send({
             status: 'success',
             message: 'berhasil menampilkan data',
-            data
+            data: data.publish
          });
       })
       .catch((err) => {
@@ -150,7 +153,8 @@ const putArticlesById = async (req, res) => {
          id_category: category.id,
          title: req.body.title,
          important: req.body.important,
-         content: req.body.content
+         content: req.body.content,
+         publish: req.body.publish
          // Jika Anda ingin mengupdate cover juga, Anda dapat menambahkan properti cover dengan req.file.path
       });
 

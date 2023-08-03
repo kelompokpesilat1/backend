@@ -32,7 +32,8 @@ module.exports = (sequelize, DataTypes) => {
          content: DataTypes.TEXT,
          viewers: DataTypes.INTEGER,
          cover: DataTypes.STRING,
-         important: DataTypes.BOOLEAN
+         important: DataTypes.BOOLEAN,
+         publish: DataTypes.BOOLEAN
       },
       {
          sequelize,
