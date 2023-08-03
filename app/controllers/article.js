@@ -156,7 +156,8 @@ const putArticlesById = async (req, res) => {
          id_category: category.id,
          title: req.body.title,
          important: req.body.important,
-         content: req.body.content
+         content: req.body.content,
+         publish: req.body.publish
          // Jika Anda ingin mengupdate cover juga, Anda dapat menambahkan properti cover dengan req.file.path
       });
 
