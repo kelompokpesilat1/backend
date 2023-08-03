@@ -10,6 +10,8 @@ const { Category } = require('../models');
 const addArticles = async (req, res) => {
    const categoryName = req.body.category;
    const { userId } = req;
+   const publish = false
+   console.log(publish);
    const category = await Category.findOne({
       where: { name: categoryName }
    });
@@ -22,13 +24,14 @@ const addArticles = async (req, res) => {
       cover: req.file.path,
       important,
       content,
-      viewers: 1
+      viewers: 1,
+      publish,
    })
       .then((data) => {
          res.send({
             status: 'success',
             message: 'berhasil menampilkan data',
-            data
+            data: data.publish
          });
       })
       .catch((err) => {
