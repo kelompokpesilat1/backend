@@ -78,9 +78,9 @@ router.post(
    addArticles
 );
 router.get('/articles', getArticles);
-router.get('/articles/detail', getArticlesByQUery);
-router.get('/articles/:title', viewersIncrement, getArticlesTitle);
-router.get('/articles/search/:q', searchArticle);
+router.get('/articles/detail', viewersIncrement, getArticlesByQUery);
+router.get('/articles/:title', getArticlesTitle);
+router.get('/articles/search/:title', searchArticle);
 router.delete(
    '/articles/delete/:title',
    verifyToken,

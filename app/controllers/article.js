@@ -2,10 +2,7 @@
 /* eslint-disable object-shorthand */
 /* eslint-disable no-param-reassign */
 const { Op, where } = require('sequelize');
-const { Article } = require('../models');
-const { Comments } = require('../models');
-const { User } = require('../models');
-const { Category } = require('../models');
+const { Article, Category, User, Comments } = require('../models');
 
 const addArticles = async (req, res) => {
    const categoryName = req.body.category;
@@ -200,7 +197,7 @@ const deleteArticlesById = async (req, res) => {
 };
 
 const searchArticle = (req, res) => {
-   const searchQuery = req.params.id;
+   const searchQuery = req.params.title;
    Article.findAll({
       where: {
          title: {
@@ -222,7 +219,7 @@ const searchArticle = (req, res) => {
 
 const viewersIncrement = async (req, res, next) => {
    try {
-      const { title } = req.params;
+      const { title } = req.query;
       const article = await Article.findOne({ where: { title: title } });
       if (!article) {
          return res.status(500).send({
