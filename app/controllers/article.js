@@ -6,6 +6,8 @@ const { Article } = require('../models');
 const { Comments } = require('../models');
 const { User } = require('../models');
 const { Category } = require('../models');
+const { Log } = require('../models');
+const { Replay_comment } = require('../models');
 
 const addArticles = async (req, res) => {
    const categoryName = req.body.category;
@@ -30,8 +32,8 @@ const addArticles = async (req, res) => {
       .then((data) => {
          res.send({
             status: 'success',
-            message: 'berhasil menampilkan data',
-            data: data.publish
+            message: 'berhasil membuat article',
+            data: data
          });
       })
       .catch((err) => {
@@ -73,7 +75,16 @@ const getArticlesTitle = async (req, res) => {
       }
       const comment = await Comments.findAll({
          where: { id_article: article.id },
-         include: User
+         include: [
+            {
+            model: User,
+            attributes: ['name']
+            },
+            {
+            model: Replay_comment,
+            attributes: ['replay']
+            },
+         ]
       });
 
       res.status(200).send({
@@ -111,7 +122,16 @@ const getArticlesByQUery = async (req, res) => {
       }
       const comment = await Comments.findAll({
          where: { id_article: article.id },
-         include: User
+         include: [
+            {
+            model: User,
+            attributes: ['name']
+            },
+            {
+            model: Replay_comment,
+            attributes: ['replay']
+            },
+         ]
       });
 
       res.status(200).send({
@@ -227,16 +247,49 @@ const searchArticle = (req, res) => {
 const viewersIncrement = async (req, res, next) => {
    try {
       const { title } = req.params;
-      const article = await Article.findOne({ where: { title: title } });
+      console.log(title);
+      const userIp = req.ip;
+      const today = new Date();
+      today.setHours(0, 0, 0, 0); // Set waktu ke awal hari
+
+      const article = await Article.findOne({
+         where: { title: title },
+         include: [{ model: Log }],
+      });
+
       if (!article) {
          return res.status(500).send({
             status: 'fail',
             message: 'article tidak ditemukan'
          });
       }
-      article.increment({
-         viewers: 1
+
+      const existingLog = await Log.findOne({
+         where: {
+            log: userIp,
+            createdAt: {
+               [Op.gte]: today,
+            },
+         },
+         include: [
+            {
+               model: Article,
+               where: { id: article.id },
+            },
+         ],
       });
+
+      if (existingLog) {
+         return next()
+      }
+
+      const log = await Log.create({ log: userIp });
+      await log.addArticle(article);
+
+      article.increment({
+         viewers: 1,
+      });
+
       next();
    } catch (error) {
       res.status(500).send({

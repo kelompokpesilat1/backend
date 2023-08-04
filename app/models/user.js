@@ -21,6 +21,9 @@ module.exports = (sequelize, DataTypes) => {
       User.hasMany(models.Article, {
         foreignKey: 'id_user',
       });
+      User.hasMany(models.Replay_comment, {
+        foreignKey: 'id_user',
+      });
     }
   }
   User.init({

@@ -37,7 +37,9 @@ const { login } = require('../controllers/login');
 const {
    createComment,
    deleteComment,
-   editCommentByUser
+   editCommentByUser,
+   createReplayComment,
+   deleteReplayComment
 } = require('../controllers/comment');
 const {
    verifyToken,
@@ -70,30 +72,13 @@ router.post('/register', checkDuplicateEmail, register);
 router.post('/login', login);
 
 // * route article
-router.post(
-   '/articles',
-   upload.single('cover'),
-   verifyToken,
-   isAuthorOrAdmin,
-   addArticles
-);
+router.post('/articles', upload.single('cover'), verifyToken, isAuthorOrAdmin, addArticles);
 router.get('/articles', getArticles);
 router.get('/articles/detail', getArticlesByQUery);
 router.get('/articles/:title', viewersIncrement, getArticlesTitle);
 router.get('/articles/search/:q', searchArticle);
-router.delete(
-   '/articles/delete/:title',
-   verifyToken,
-   isAuthorOrAdmin,
-   deleteArticlesById
-);
-router.put(
-   '/articles/update/:title',
-   upload.single('cover'),
-   verifyToken,
-   isAuthorOrAdmin,
-   putArticlesById
-);
+router.delete('/articles/delete/:title', verifyToken, isAuthorOrAdmin, deleteArticlesById);
+router.put('/articles/update/:title', upload.single('cover'), verifyToken, isAuthorOrAdmin, putArticlesById);
 
 // * route user
 router.get('/users', getUsers);
@@ -102,12 +87,7 @@ router.get('/userByAuth', verifyToken, getUsersByAuth);
 router.get('/user/search/:q', searchUser);
 router.put('/user/editAdmin/:id', verifyToken, isAdmin, editUserByAdmin);
 router.delete('/user/deleteAdmin/:id', verifyToken, isAdmin, deleteUserByAdmin);
-router.put(
-   '/user/edit/:id',
-   verifyToken,
-   upload.single('foto'),
-   editUserByUser
-);
+router.put('/user/edit/:id', verifyToken, upload.single('foto'), editUserByUser);
 router.delete('/user/delete/:id', verifyToken, deleteUserByUser);
 
 // * route category
@@ -133,14 +113,13 @@ router.get('/admin/view', verifyToken, isAdmin, viewForAdmin);
 
 // * route buat SEO
 router.get('/seo', getSEO);
-router.put(
-   '/updateseo/:id',
-   verifyToken,
-   upload.single('logo'),
-   isAdmin,
-   updateSEO
-);
+router.put('/updateseo/:id', verifyToken, upload.single('logo'), isAdmin, updateSEO);
 
+//* route buat view
 router.get('/view', getViewersPerMonth);
+
+//* route buat replay commant
+router.post('/commant/replay/:id', verifyToken, createReplayComment)
+router.delete('/commant/replay/:id', verifyToken, deleteReplayComment)
 
 module.exports = router;

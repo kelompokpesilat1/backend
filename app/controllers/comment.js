@@ -1,4 +1,4 @@
-const { Comments, Article } = require('../models');
+const { Comments, Article, Replay_comment } = require('../models');
 
 const createComment = async (req, res) => {
    const { commentar } = req.body;
@@ -85,4 +85,52 @@ const editCommentByUser = (req, res) => {
       });
 };
 
-module.exports = { createComment, deleteComment, editCommentByUser };
+const createReplayComment = async (req, res) => {
+   try {
+      const replay = await Replay_comment.create({
+         id_comment: req.params.id,
+         id_user: req.userId,
+         replay: req.body.replay
+      })
+      res.send({
+         status: 'success',
+         message: 'berhasil mereplay commentar',
+         replay
+      })
+   } catch (error) {
+      res.status(500).send({
+         status: 'fail',
+         message: 'gagal menambah replay'
+      })
+   }
+}
+const deleteReplayComment = async (req, res) => {
+   try {
+      const { id } = req.params;
+      const { userId } = req;
+
+      const comment = await Replay_comment.findByPk(id);
+
+      if (comment.id_user !== userId) {
+         return res.status(500).send({
+            status: 'fail',
+            message: 'maaf anda tidak bisa menghapus komentar ini'
+         });
+      }
+
+      await Replay_comment.destroy();
+
+      res.status(200).send({
+         status: 'success',
+         message: 'Berhasil Menghapus komentar'
+      });
+   } catch (error) {
+      return res.status(500).send({
+         status: 'fail',
+         message: 'Gagal Menghapus komentar',
+      });
+   }
+
+}
+
+module.exports = { createComment, deleteComment, editCommentByUser, createReplayComment, deleteReplayComment };

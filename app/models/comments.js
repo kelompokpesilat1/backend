@@ -18,6 +18,9 @@ module.exports = (sequelize, DataTypes) => {
       Comments.belongsTo(models.Article, {
         foreignKey: 'id_article',
       });
+      Comments.hasMany(models.Replay_comment, {
+        foreignKey: 'id_comment',
+      });
     }
   }
   Comments.init({
