@@ -4,46 +4,48 @@
 /* eslint-disable no-undef */
 const express = require('express');
 const {
-   addArticles,
-   getArticles,
-   getArticlesTitle,
-   putArticlesById,
-   deleteArticlesById,
-   searchArticle,
-   viewersIncrement,
-   getArticlesByQUery
+  addArticles,
+  getArticles,
+  getArticlesTitle,
+  putArticlesById,
+  deleteArticlesById,
+  searchArticle,
+  viewersIncrement,
+  getArticlesByQUery
 } = require('../controllers/article');
 const {
-   getUsers,
-   getUserById,
-   editUserByAdmin,
-   deleteUserByAdmin,
-   editUserByUser,
-   deleteUserByUser,
-   searchUser,
-   getUsersByAuth
+  getUsers,
+  getUserById,
+  editUserByAdmin,
+  deleteUserByAdmin,
+  editUserByUser,
+  deleteUserByUser,
+  searchUser,
+  getUsersByAuth
 } = require('../controllers/users');
 const {
-   addCategory,
-   getCategory,
-   getCategoryById,
-   updateCategoryById,
-   deleteCategoryById,
-   getCategoryByName
+  addCategory,
+  getCategory,
+  getCategoryById,
+  updateCategoryById,
+  deleteCategoryById,
+  getCategoryByName
 } = require('../controllers/category');
 const { getRoles, getRoleById } = require('../controllers/roles');
 const { checkDuplicateEmail, register } = require('../controllers/register');
 const { login } = require('../controllers/login');
 const {
-   createComment,
-   deleteComment,
-   editCommentByUser
+  createComment,
+  deleteComment,
+  editCommentByUser,
+  createReplayComment,
+  deleteReplayComment
 } = require('../controllers/comment');
 const {
-   verifyToken,
-   isAuthor,
-   isAdmin,
-   isAuthorOrAdmin
+  verifyToken,
+  isAuthor,
+  isAdmin,
+  isAuthorOrAdmin
 } = require('../middleware/verifyJwtToken');
 const { viewForAdmin, viewAuthor } = require('../controllers/view');
 const { createSEO, updateSEO, getSEO } = require('../controllers/seo');
@@ -53,15 +55,15 @@ const multer = require('multer');
 const { getViewersPerMonth } = require('../controllers/analytic');
 
 const storage = multer.diskStorage({
-   destination: (req, file, cb) => {
-      // Specify the destination directory where files will be stored
-      cb(null, './assets');
-   },
-   filename: (req, file, cb) => {
-      // Customize the filename (optional)
-      // In this example, we keep the original filename
-      cb(null, file.originalname);
-   }
+  destination: (req, file, cb) => {
+    // Specify the destination directory where files will be stored
+    cb(null, './assets');
+  },
+  filename: (req, file, cb) => {
+    // Customize the filename (optional)
+    // In this example, we keep the original filename
+    cb(null, file.originalname);
+  }
 });
 
 const upload = multer({ storage });
@@ -71,28 +73,28 @@ router.post('/login', login);
 
 // * route article
 router.post(
-   '/articles',
-   upload.single('cover'),
-   verifyToken,
-   isAuthorOrAdmin,
-   addArticles
+  '/articles',
+  upload.single('cover'),
+  verifyToken,
+  isAuthorOrAdmin,
+  addArticles
 );
 router.get('/articles', getArticles);
 router.get('/articles/detail', viewersIncrement, getArticlesByQUery);
 router.get('/articles/:title', getArticlesTitle);
 router.get('/articles/search/:title', searchArticle);
 router.delete(
-   '/articles/delete/:title',
-   verifyToken,
-   isAuthorOrAdmin,
-   deleteArticlesById
+  '/articles/delete/:title',
+  verifyToken,
+  isAuthorOrAdmin,
+  deleteArticlesById
 );
 router.put(
-   '/articles/update/:title',
-   upload.single('cover'),
-   verifyToken,
-   isAuthorOrAdmin,
-   putArticlesById
+  '/articles/update/:title',
+  upload.single('cover'),
+  verifyToken,
+  isAuthorOrAdmin,
+  putArticlesById
 );
 
 // * route user
@@ -103,10 +105,10 @@ router.get('/user/search/:q', searchUser);
 router.put('/user/editAdmin/:id', verifyToken, isAdmin, editUserByAdmin);
 router.delete('/user/deleteAdmin/:id', verifyToken, isAdmin, deleteUserByAdmin);
 router.put(
-   '/user/edit/:id',
-   verifyToken,
-   upload.single('foto'),
-   editUserByUser
+  '/user/edit/:id',
+  verifyToken,
+  upload.single('foto'),
+  editUserByUser
 );
 router.delete('/user/delete/:id', verifyToken, deleteUserByUser);
 
@@ -134,13 +136,18 @@ router.get('/admin/view', verifyToken, isAdmin, viewForAdmin);
 // * route buat SEO
 router.get('/seo', getSEO);
 router.put(
-   '/updateseo/:id',
-   verifyToken,
-   upload.single('logo'),
-   isAdmin,
-   updateSEO
+  '/updateseo/:id',
+  verifyToken,
+  upload.single('logo'),
+  isAdmin,
+  updateSEO
 );
 
+//* route buat view
 router.get('/view', getViewersPerMonth);
+
+//* route buat replay commant
+router.post('/commant/replay/:id', verifyToken, createReplayComment);
+router.delete('/commant/replay/:id', verifyToken, deleteReplayComment);
 
 module.exports = router;
