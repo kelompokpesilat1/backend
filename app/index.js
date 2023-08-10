@@ -1,5 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
-// inisialisani express
 const express = require('express');
 const cors = require('cors');
 
@@ -17,10 +15,8 @@ const port = process.env.PORT;
 
 try {
   sequelize.authenticate();
-  // eslint-disable-next-line no-console
   console.log('Connection has been established successfully.');
 } catch (error) {
-  // eslint-disable-next-line no-console
   console.error('Unable to connect to the database:', error);
 }
 
