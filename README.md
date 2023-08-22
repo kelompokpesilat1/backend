@@ -1,3 +1,5 @@
 # ini adalah tugas cms article dari klompok 1 pesilat 2023
 <br>
 built with exspress js, orm sequelize and db mysql
+<br>
+contribute ihsan, dandy and zulfikar
